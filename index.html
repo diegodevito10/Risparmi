@@ -23,9 +23,81 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 .categoryrow{display:flex;align-items:center;gap:10px;margin:9px 0}.categoryrow .catname{width:120px;font-size:13px}.cattrack{height:8px;background:#292f38;border-radius:99px;overflow:hidden;flex:1}.catfill{height:100%;background:#64748b}
 .lock{position:fixed;inset:0;background:#0b0d10;z-index:9999;display:none;align-items:center;justify-content:center;padding:25px}.lockbox{width:min(420px,100%);text-align:center}.lockbox input{text-align:center;font-size:24px;letter-spacing:8px}.hidden{display:none!important}
 @media(min-width:600px){.grid{grid-template-columns:1fr 1fr}}
+
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:12px;border:1px solid var(--line);border-radius:14px}
+.savetable{width:100%;min-width:680px;border-collapse:collapse;font-size:13px}
+.savetable th,.savetable td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+.savetable th:first-child,.savetable td:first-child{text-align:left;position:sticky;left:0;background:var(--card);z-index:1}
+.savetable th{color:var(--muted);font-weight:700;background:var(--card2)}
+.savetable tr:last-child td{border-bottom:0}
+.savetable .positive{color:var(--success);font-weight:700}
+.savetable .negative{color:var(--danger);font-weight:700}
+.savetable .totalrow td{font-weight:800;background:var(--card2)}
+.tablehint{margin-top:9px;font-size:12px;color:var(--muted)}
+
+
+/* ===== MENU LATERALE ===== */
+.menuBtn{
+  position:fixed;top:14px;left:14px;z-index:1002;
+  width:44px;height:44px;border:1px solid var(--line);border-radius:13px;
+  background:var(--card);color:var(--text);font-size:24px;line-height:1;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,0,0,.22)
+}
+.menuBtn span{display:block;margin-top:-3px}
+.appTop{padding-top:70px}
+.sideMenu{
+  position:fixed;inset:0 auto 0 0;width:min(310px,86vw);z-index:1001;
+  background:var(--bg);border-right:1px solid var(--line);
+  transform:translateX(-105%);transition:transform .22s ease;
+  box-shadow:14px 0 35px rgba(0,0,0,.35);overflow-y:auto;padding:72px 14px 24px
+}
+.sideMenu.open{transform:translateX(0)}
+.menuOverlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;
+  opacity:0;pointer-events:none;transition:opacity .2s
+}
+.menuOverlay.open{opacity:1;pointer-events:auto}
+.menuTitle{font-size:21px;font-weight:800;margin:0 8px 18px}
+.menuSection{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:18px 8px 7px}
+.menuItem{
+  width:100%;display:flex;align-items:center;gap:12px;padding:13px 12px;
+  border:0;background:transparent;color:var(--text);border-radius:12px;
+  text-align:left;font-size:15px;cursor:pointer
+}
+.menuItem:hover,.menuItem.active{background:var(--card2)}
+.menuIcon{width:25px;text-align:center;font-size:19px}
+.menuClose{position:absolute;top:14px;right:14px}
+.menuPage{display:none}
+.menuPage.active{display:block}
+
 </style>
 </head>
+
 <body>
+<button class="menuBtn" id="menuBtn" aria-label="Apri menu"><span>☰</span></button>
+<div class="menuOverlay" id="menuOverlay"></div>
+<aside class="sideMenu" id="sideMenu">
+  <button class="menuBtn menuClose" id="menuClose" aria-label="Chiudi menu"><span>×</span></button>
+  <div class="menuTitle">💰 I miei Risparmi</div>
+
+  <div class="menuSection">Panoramica</div>
+  <button class="menuItem active" data-page="home"><span class="menuIcon">🏠</span>Home</button>
+  <button class="menuItem" data-page="obiettivi"><span class="menuIcon">🎯</span>Obiettivi</button>
+
+  <div class="menuSection">Gestione</div>
+  <button class="menuItem" data-page="soldi"><span class="menuIcon">💶</span>Gestisci i miei soldi</button>
+  <button class="menuItem" data-page="tabella"><span class="menuIcon">📋</span>Tabella risparmi</button>
+  <button class="menuItem" data-page="movimenti"><span class="menuIcon">🧾</span>Movimenti</button>
+
+  <div class="menuSection">Analisi</div>
+  <button class="menuItem" data-page="grafici"><span class="menuIcon">📊</span>Grafici e statistiche</button>
+  <button class="menuItem" data-page="posizione"><span class="menuIcon">📍</span>Dove sono i soldi?</button>
+
+  <div class="menuSection">Impostazioni</div>
+  <button class="menuItem" data-page="impostazioni"><span class="menuIcon">⚙️</span>Impostazioni</button>
+</aside>
+
 <div id="lockScreen" class="lock"><div class="lockbox">
   <div style="font-size:54px">🔐</div><h2>Inserisci il PIN</h2><div class="note">I tuoi dati restano salvati sul dispositivo.</div>
   <input id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
@@ -90,6 +162,29 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
     <h2 style="margin-top:0">📈 Andamento mensile</h2>
     <div class="note">Risparmi messi da parte e spese registrate per mese.</div>
     <div id="monthlyChart" class="chart"></div>
+  </div>
+
+
+  <div class="card">
+    <h2 style="margin-top:0">📋 Tabella dei risparmi</h2>
+    <div class="note">Qui vedi automaticamente quanto hai messo da parte e quanto hai speso ogni mese. La tabella si aggiorna insieme ai movimenti dell'app.</div>
+    <div class="tablewrap">
+      <table class="savetable">
+        <thead>
+          <tr>
+            <th>Mese</th>
+            <th>Napoli</th>
+            <th>Fantacalcio</th>
+            <th>Motorino</th>
+            <th>Risparmi</th>
+            <th>Spese</th>
+            <th>Saldo mese</th>
+          </tr>
+        </thead>
+        <tbody id="savingsTableBody"></tbody>
+      </table>
+    </div>
+    <div class="tablehint">Scorri lateralmente sulla tabella se sei su iPhone.</div>
   </div>
 
   <div class="card">
@@ -164,6 +259,62 @@ function save(){data.locations.Portafoglio=data.personalWallet;localStorage.setI
 function currentMonthSpent(){const key=monthKey();return data.history.filter(h=>h.type==="spend"&&String(h.iso||"").slice(0,7)===key).reduce((s,h)=>s+Math.abs(h.amount),0)}
 function currentMonthSaved(){const key=monthKey();return data.history.filter(h=>h.type==="save"&&String(h.iso||"").slice(0,7)===key).reduce((s,h)=>s+h.amount,0)}
 
+
+function renderSavingsTable(){
+ const months={};
+ const now=new Date();
+ // Show the last 6 months plus the current month, even if there are no movements.
+ for(let i=5;i>=0;i--){
+   const d=new Date(now.getFullYear(),now.getMonth()-i,1);
+   const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0");
+   months[k]={napoli:0,fanta:0,motorino:0,saved:0,spent:0};
+ }
+ data.history.forEach(h=>{
+   const k=String(h.iso||"").slice(0,7);
+   if(!k)return;
+   if(!months[k])months[k]={napoli:0,fanta:0,motorino:0,saved:0,spent:0};
+   if(h.type==="save"){
+     const n=Number(h.amount)||0;
+     months[k].saved+=n;
+     const name=String(h.fund||"").toLowerCase();
+     if(name.includes("napoli"))months[k].napoli+=n;
+     else if(name.includes("fantacalcio"))months[k].fanta+=n;
+     else if(name.includes("motorino"))months[k].motorino+=n;
+   }
+   if(h.type==="spend")months[k].spent+=Math.abs(Number(h.amount)||0);
+ });
+ const keys=Object.keys(months).sort().slice(-6);
+ let totalNapoli=0,totalFanta=0,totalMotorino=0,totalSaved=0,totalSpent=0;
+ const rows=keys.map(k=>{
+   const m=months[k];
+   totalNapoli+=m.napoli; totalFanta+=m.fanta; totalMotorino+=m.motorino;
+   totalSaved+=m.saved; totalSpent+=m.spent;
+   const saldo=m.saved-m.spent;
+   const [y,mo]=k.split("-");
+   const label=new Date(Number(y),Number(mo)-1,1).toLocaleDateString("it-IT",{month:"short",year:"numeric"});
+   return `<tr>
+     <td>${label.charAt(0).toUpperCase()+label.slice(1)}</td>
+     <td>${m.napoli?euro(m.napoli):"—"}</td>
+     <td>${m.fanta?euro(m.fanta):"—"}</td>
+     <td>${m.motorino?euro(m.motorino):"—"}</td>
+     <td class="positive">${m.saved?"+"+euro(m.saved):"—"}</td>
+     <td class="negative">${m.spent?"−"+euro(m.spent):"—"}</td>
+     <td class="${saldo>=0?"positive":"negative"}">${saldo>=0?"+":"−"}${euro(Math.abs(saldo))}</td>
+   </tr>`;
+ }).join("");
+ const totalSaldo=totalSaved-totalSpent;
+ document.getElementById("savingsTableBody").innerHTML=rows+`
+   <tr class="totalrow">
+     <td>Totale</td>
+     <td>${euro(totalNapoli)}</td>
+     <td>${euro(totalFanta)}</td>
+     <td>${euro(totalMotorino)}</td>
+     <td class="positive">+${euro(totalSaved)}</td>
+     <td class="negative">${totalSpent?"−"+euro(totalSpent):"—"}</td>
+     <td class="${totalSaldo>=0?"positive":"negative"}">${totalSaldo>=0?"+":"−"}${euro(Math.abs(totalSaldo))}</td>
+   </tr>`;
+}
+
 function render(){
  const total=data.funds.reduce((s,f)=>s+Number(f.saved||0),0);
  const owned=total+data.personalWallet;
@@ -207,6 +358,8 @@ function render(){
  data.history.forEach(h=>{const k=String(h.iso||"").slice(0,7);if(!k)return;if(!monthMap[k])monthMap[k]={save:0,spend:0};if(h.type==="save")monthMap[k].save+=Math.max(0,h.amount);if(h.type==="spend")monthMap[k].spend+=Math.abs(h.amount)});
  const keys=Object.keys(monthMap).sort().slice(-6); const maxM=Math.max(1,...keys.flatMap(k=>[monthMap[k].save,monthMap[k].spend]));
  document.getElementById("monthlyChart").innerHTML=keys.length?keys.map(k=>`<div class="chartcol"><div class="chartvalue">+${euro(monthMap[k].save)}</div><div class="chartbar" style="height:${Math.max(2,monthMap[k].save/maxM*75)}%"></div><div class="chartlabel">${monthName(k)}<br><span style="color:#f87171">−${euro(monthMap[k].spend)}</span></div></div>`).join(""):"<div class='muted'>Registra qualche movimento per vedere l'andamento.</div>";
+
+ renderSavingsTable();
 
  document.getElementById("history").innerHTML=data.history.slice().reverse().map(h=>{
   const amount=Number(h.amount); const title=h.fund||"Movimento";
@@ -273,6 +426,55 @@ function resetApp(){
  }
 }
 render();checkPin();
+
+// ===== NAVIGAZIONE MENU =====
+(function(){
+  const btn=document.getElementById("menuBtn"), close=document.getElementById("menuClose"),
+        menu=document.getElementById("sideMenu"), overlay=document.getElementById("menuOverlay");
+  const items=[...document.querySelectorAll(".menuItem")];
+  function openMenu(){menu.classList.add("open");overlay.classList.add("open")}
+  function closeMenu(){menu.classList.remove("open");overlay.classList.remove("open")}
+  btn.addEventListener("click",openMenu); close.addEventListener("click",closeMenu); overlay.addEventListener("click",closeMenu);
+
+  function cards(){
+    return [...document.querySelectorAll("main .card")];
+  }
+  function findCard(text){
+    return cards().find(c=>(c.innerText||"").toLowerCase().includes(text.toLowerCase()));
+  }
+  function showPage(page){
+    const all=cards();
+    all.forEach(c=>c.style.display="none");
+    // Header/summary elements remain visible on Home.
+    const homeWords=["portafoglio","totale risparmi","obiettivo","progress"];
+    if(page==="home"){
+      all.forEach(c=>{
+        const t=(c.innerText||"").toLowerCase();
+        if(homeWords.some(w=>t.includes(w))) c.style.display="";
+      });
+    } else if(page==="obiettivi"){
+      all.forEach(c=>{const t=(c.innerText||"").toLowerCase(); if(t.includes("napoli")||t.includes("fantacalcio")||t.includes("motorino")) c.style.display="";});
+    } else if(page==="soldi"){
+      const c=findCard("gestisci i miei soldi"); if(c)c.style.display="";
+    } else if(page==="tabella"){
+      const c=findCard("tabella dei risparmi"); if(c)c.style.display="";
+    } else if(page==="movimenti"){
+      const c=findCard("movimenti"); if(c)c.style.display="";
+    } else if(page==="grafici"){
+      all.forEach(c=>{const t=(c.innerText||"").toLowerCase(); if(t.includes("graf")||t.includes("andamento")||t.includes("mensile")) c.style.display="";});
+    } else if(page==="posizione"){
+      const c=findCard("dove sono i soldi"); if(c)c.style.display="";
+    } else if(page==="impostazioni"){
+      all.forEach(c=>{const t=(c.innerText||"").toLowerCase(); if(t.includes("impostaz")||t.includes("pin")||t.includes("budget")) c.style.display="";});
+    }
+    items.forEach(i=>i.classList.toggle("active",i.dataset.page===page));
+    closeMenu();
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+  items.forEach(i=>i.addEventListener("click",()=>showPage(i.dataset.page)));
+  window.addEventListener("load",()=>showPage("home"));
+})();
+
 </script>
 </body>
 </html>
