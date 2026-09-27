@@ -25,6 +25,79 @@ label{display:block;margin:12px 0 0;font-weight:650;font-size:14px}.history{font
 .small{font-size:13px}.pill{background:#eef1f5;padding:5px 9px;border-radius:99px;font-size:12px}
 @media(min-width:600px){.grid{grid-template-columns:1fr 1fr}}
 </style>
+
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0b0d10;
+  --card:#15181d;
+  --card2:#1b1f25;
+  --text:#f5f7fa;
+  --muted:#9da5b0;
+  --line:#2a3038;
+  --accent:#3b82f6;
+  --accent2:#60a5fa;
+  --danger:#f87171;
+  --success:#4ade80;
+}
+html,body{
+  background:var(--bg)!important;
+  color:var(--text)!important;
+}
+body{
+  min-height:100vh;
+}
+.card,.fund,.item{
+  background:var(--card)!important;
+  border-color:var(--line)!important;
+  color:var(--text)!important;
+}
+input,select,textarea{
+  background:var(--card2)!important;
+  color:var(--text)!important;
+  border:1px solid var(--line)!important;
+}
+input::placeholder,textarea::placeholder{
+  color:#747d89!important;
+}
+button{
+  background:var(--accent)!important;
+  color:white!important;
+  border:0!important;
+}
+button.secondary{
+  background:#252a32!important;
+  color:var(--text)!important;
+  border:1px solid var(--line)!important;
+}
+button:active{
+  transform:scale(.98);
+}
+.muted,.note{
+  color:var(--muted)!important;
+}
+.total{
+  color:var(--text)!important;
+}
+.bar{
+  background:#292f38!important;
+}
+.fill{
+  background:var(--accent)!important;
+}
+.plus{color:var(--success)!important}
+.minus{color:var(--danger)!important}
+h1,h2,h3,strong,label,span{
+  color:inherit;
+}
+hr{
+  border-color:var(--line)!important;
+}
+a{
+  color:var(--accent2)!important;
+}
+</style>
+
 </head>
 <body>
 <div class="wrap">
@@ -32,41 +105,62 @@ label{display:block;margin:12px 0 0;font-weight:650;font-size:14px}.history{font
   <div class="sub">Controlla Napoli, Fantacalcio e Motorino.</div>
 
   <div class="card">
-    <div class="muted">Totale risparmiato</div>
-    <div id="grandTotal" class="total">€75,00</div>
-    <div class="note">Il saldo iniziale comprende i €75 già messi da parte per Napoli.</div>
+    <div class="row" style="align-items:flex-start">
+      <div style="flex:1">
+        <div class="muted">👛 I miei soldi</div>
+        <div id="personalWallet" class="total">€115,00</div>
+        <div class="note">Disponibili per uscite e acquisti</div>
+      </div>
+      <div style="flex:1;text-align:right">
+        <div class="muted">💰 Totale risparmiato</div>
+        <div id="grandTotal" class="total">€75,00</div>
+        <div class="note">Napoli + Fantacalcio + Motorino</div>
+      </div>
+    </div>
+  </div>
+<div id="funds" class="grid"></div>
   </div>
 
   <div class="card">
-    <div class="row"><h2 style="margin:0">Obiettivi</h2><span class="pill">saldi reali</span></div>
-    <div id="funds" class="grid"></div>
-  </div>
+    <h2 style="margin-top:0">🔄 Gestisci i miei soldi</h2>
+    <div class="note">Puoi spostare i soldi dal portafoglio ai salvadanai, riprenderli dai risparmi oppure spenderli.</div>
 
-  <div class="card">
-    <h2 style="margin-top:0">➕ Aggiungi soldi</h2>
-    <label>Obiettivo
+    <label>Operazione
+      <select id="moneyOperation" onchange="toggleMoneyFields()">
+        <option value="save">Metti nei risparmi</option>
+        <option value="withdraw">Togli dai risparmi</option>
+        <option value="spend">Acquista / Spendi</option>
+        <option value="addwallet">Aggiungi soldi al portafoglio</option>
+      </select>
+    </label>
+
+    <label id="fundLabel">Salvadanaio
       <select id="fundSelect"></select>
     </label>
+
     <label>Importo (€)
       <input id="amount" type="number" inputmode="decimal" min="0" step="5" placeholder="es. 20">
     </label>
-    <label>Dove li hai messi?
+
+    <label id="locationLabel">Dove metti fisicamente i soldi?
       <select id="location">
         <option>Salvadanaio</option>
         <option>Portafoglio</option>
       </select>
     </label>
+
     <label>Nota (facoltativa)
-      <input id="note" type="text" placeholder="es. quota ottobre">
+      <input id="note" type="text" placeholder="es. quota ottobre / uscita con amici">
     </label>
-    <div class="actions"><button onclick="addMoney()">Aggiungi</button></div>
+
+    <div class="actions"><button onclick="manageMoney()">Conferma operazione</button></div>
   </div>
 
   <div class="card">
     <h2 style="margin-top:0">📦 Dove sono i soldi?</h2>
     <div class="row"><span>Salvadanaio</span><strong id="piggy">€75,00</strong></div>
-    <div class="row" style="margin-top:10px"><span>Portafoglio</span><strong id="wallet">€0,00</strong></div>
-    <div class="note" style="margin-top:10px">Qui puoi vedere la somma fisica che hai nei due posti.</div>
+    <div class="row" style="margin-top:10px"><span>Portafoglio</span><strong id="wallet">€115,00</strong></div>
+    <div class="note" style="margin-top:10px">Il portafoglio qui indica i soldi personali disponibili; i risparmi sono separati.</div>
   </div>
 
   <div class="card">
@@ -84,17 +178,22 @@ const initial={
   {id:"fanta",name:"Fantacalcio",target:150,saved:0},
   {id:"motorino",name:"Motorino",target:1500,saved:0}
  ],
- locations:{Salvadanaio:75,Portafoglio:0},
- history:[{date:new Date().toLocaleDateString("it-IT"),fund:"Napoli",amount:75,location:"Salvadanaio",note:"Saldo iniziale: 3 quote già messe da parte"}]
+ locations:{Salvadanaio:75,Portafoglio:115},
+ history:[{date:new Date().toLocaleDateString("it-IT"),fund:"Napoli",amount:75,location:"Salvadanaio",note:"Saldo iniziale: 3 quote già messe da parte"}],
+ personalWallet:115,
+ walletHistory:[]
 };
 let data=JSON.parse(localStorage.getItem(KEY)||"null")||initial;
+if(typeof data.personalWallet !== "number") data.personalWallet=115;
+if(!Array.isArray(data.walletHistory)) data.walletHistory=[];
 function euro(n){return new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR"}).format(n)}
 function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
 function render(){
  const total=data.funds.reduce((s,f)=>s+f.saved,0);
  document.getElementById("grandTotal").textContent=euro(total);
+ document.getElementById("personalWallet").textContent=euro(data.personalWallet);
  document.getElementById("piggy").textContent=euro(data.locations.Salvadanaio);
- document.getElementById("wallet").textContent=euro(data.locations.Portafoglio);
+ document.getElementById("wallet").textContent=euro(data.personalWallet);
  document.getElementById("funds").innerHTML=data.funds.map(f=>{
   const p=Math.min(100,(f.saved/f.target)*100);
   return `<div class="fund"><div class="row"><strong>${f.name}</strong><strong>${euro(f.saved)}</strong></div>
@@ -103,22 +202,71 @@ function render(){
  }).join("");
  document.getElementById("fundSelect").innerHTML=data.funds.map(f=>`<option value="${f.id}">${f.name}</option>`).join("");
  document.getElementById("history").innerHTML=data.history.slice().reverse().map(h=>
-  `<div class="item"><div class="row"><strong>${h.fund}</strong><span class="plus">+${euro(h.amount)}</span></div>
-   <div class="note">${h.date} · ${h.location}${h.note?" · "+h.note:""}</div></div>`
+  `<div class="item"><div class="row"><strong>${h.fund||h.type||"Movimento"}</strong><span class="${h.amount<0?"minus":"plus"}">${h.amount<0?"":"+"}${euro(h.amount)}</span></div>
+   <div class="note">${h.date}${h.location?" · "+h.location:""}${h.note?" · "+h.note:""}</div></div>`
  ).join("")||"<div class='muted'>Nessun movimento.</div>";
+ toggleMoneyFields();
 }
-function addMoney(){
- const id=document.getElementById("fundSelect").value;
+function toggleMoneyFields(){
+ const op=document.getElementById("moneyOperation").value;
+ const fundLabel=document.getElementById("fundLabel");
+ const locationLabel=document.getElementById("locationLabel");
+ fundLabel.style.display=(op==="save"||op==="withdraw")?"block":"none";
+ locationLabel.style.display=(op==="save")?"block":"none";
+}
+function manageMoney(){
+ const op=document.getElementById("moneyOperation").value;
  const amount=parseFloat(document.getElementById("amount").value);
- const location=document.getElementById("location").value;
  const note=document.getElementById("note").value.trim();
+ const id=document.getElementById("fundSelect").value;
+ const location=document.getElementById("location").value;
  if(!amount||amount<=0){alert("Inserisci un importo valido.");return}
- const f=data.funds.find(x=>x.id===id); f.saved+=amount; data.locations[location]+=amount;
- data.history.push({date:new Date().toLocaleDateString("it-IT"),fund:f.name,amount,location,note});
- document.getElementById("amount").value="";document.getElementById("note").value="";save();
+
+ const today=new Date().toLocaleDateString("it-IT");
+ const f=data.funds.find(x=>x.id===id);
+
+ if(op==="save"){
+  if(amount>data.personalWallet){
+   alert("Non puoi mettere nei risparmi più soldi di quelli che hai nel portafoglio.");return
+  }
+  data.personalWallet-=amount;
+  f.saved+=amount;
+  data.locations.Salvadanaio+=amount;
+  data.history.push({date:today,fund:f.name,amount,location:"Dal portafoglio → Salvadanaio",note:note||"Soldi messi nei risparmi"});
+ }
+ else if(op==="withdraw"){
+  if(amount>f.saved){
+   alert("Non puoi togliere più soldi di quelli presenti in questo salvadanaio.");return
+  }
+  f.saved-=amount;
+  data.personalWallet+=amount;
+  data.locations.Salvadanaio-=amount;
+  data.history.push({date:today,fund:f.name,amount:-amount,location:"Salvadanaio → Portafoglio",note:note||"Soldi ripresi dai risparmi"});
+ }
+ else if(op==="spend"){
+  if(amount>data.personalWallet){
+   alert("Non puoi spendere più dei soldi presenti nel portafoglio.");return
+  }
+  data.personalWallet-=amount;
+  data.history.push({date:today,fund:"Portafoglio",amount:-amount,location:"Acquisto / spesa",note:note||"Acquisto"});
+ }
+ else if(op==="addwallet"){
+  data.personalWallet+=amount;
+  data.history.push({date:today,fund:"Portafoglio",amount:amount,location:"Entrata",note:note||"Soldi aggiunti al portafoglio"});
+ }
+
+ data.locations.Portafoglio=data.personalWallet;
+ document.getElementById("amount").value="";
+ document.getElementById("note").value="";
+ save();
 }
 function resetApp(){
- if(confirm("Vuoi davvero cancellare tutti i dati dell'app?")){localStorage.removeItem(KEY);data=initial;render()}
+ if(confirm("Vuoi davvero cancellare tutti i dati dell'app?")){
+  localStorage.removeItem(KEY);
+  data=JSON.parse(JSON.stringify(initial));
+  data.history[0].date=new Date().toLocaleDateString("it-IT");
+  render();
+ }
 }
 render();
 </script>
