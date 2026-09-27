@@ -38,7 +38,7 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 
 
 /* ===== BOTTOM NAVIGATION ===== */
-body{padding-bottom:82px}
+body{padding-bottom:92px}.card{scroll-margin-top:15px;scroll-margin-bottom:100px}
 .bottomNav{
  position:fixed;left:10px;right:10px;bottom:10px;z-index:5000;
  height:62px;background:var(--card);border:1px solid var(--line);
@@ -46,7 +46,7 @@ body{padding-bottom:82px}
  box-shadow:0 8px 28px rgba(0,0,0,.35);padding:5px;
  backdrop-filter:blur(12px)
 }
-.bottomItem{
+.bottomItem{text-decoration:none;cursor:pointer;
  border:0;background:transparent;color:var(--muted);border-radius:13px;
  display:flex;flex-direction:column;align-items:center;justify-content:center;
  gap:2px;font-size:10px;font-weight:600
@@ -60,7 +60,7 @@ body{padding-bottom:82px}
  display:none;grid-template-columns:repeat(2,1fr);gap:7px
 }
 .bottomMore.open{display:grid}
-.moreItem{
+.moreItem{text-decoration:none;display:block;
  border:0;background:var(--card2);color:var(--text);padding:12px 8px;
  border-radius:12px;font-size:13px;text-align:left
 }
@@ -80,7 +80,7 @@ body{padding-bottom:82px}
   <h1>💰 I miei risparmi</h1>
   <div class="sub">Controlla i tuoi soldi, le spese e i tuoi obiettivi.</div>
 
-  <div class="card">
+  <div class="card" id="home">
     <div class="row" style="align-items:flex-start">
       <div style="flex:1"><div class="muted">👛 I miei soldi</div><div id="personalWallet" class="total">€115,00</div><div class="note">Disponibili per uscite e acquisti</div></div>
       <div style="flex:1;text-align:right"><div class="muted">💰 Totale risparmiato</div><div id="grandTotal" class="total">€75,00</div><div class="note">Napoli + Fantacalcio + Motorino</div></div>
@@ -91,7 +91,7 @@ body{padding-bottom:82px}
 
   <div id="funds" class="grid"></div>
 
-  <div class="card">
+  <div class="card" id="soldi">
     <h2 style="margin-top:0">🔄 Gestisci i miei soldi</h2>
     <div class="note">Sposta i soldi tra portafoglio e salvadanai, spendili o aggiungine di nuovi.</div>
     <label>Operazione
@@ -112,7 +112,7 @@ body{padding-bottom:82px}
     <div class="actions"><button onclick="manageMoney()">Conferma operazione</button></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="budget">
     <h2 style="margin-top:0">📅 Budget di questo mese</h2>
     <label>Quanto vuoi poter spendere questo mese? (€)<input id="monthlyBudget" type="number" inputmode="decimal" min="0" step="5" placeholder="es. 100"></label>
     <div class="statgrid" style="margin-top:12px">
@@ -123,20 +123,20 @@ body{padding-bottom:82px}
     <div id="budgetText" class="note">Imposta un budget per controllare le spese del mese.</div>
   </div>
 
-  <div class="card">
+  <div class="card" id="divisione">
     <h2 style="margin-top:0">📊 Come sono divisi i miei soldi</h2>
     <div id="chart" class="chart"></div>
     <div id="categoryChart" style="margin-top:18px"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="andamento">
     <h2 style="margin-top:0">📈 Andamento mensile</h2>
     <div class="note">Risparmi messi da parte e spese registrate per mese.</div>
     <div id="monthlyChart" class="chart"></div>
   </div>
 
 
-  <div class="card">
+  <div class="card" id="tabella">
     <h2 style="margin-top:0">📋 Tabella dei risparmi</h2>
     <div class="note">Qui vedi automaticamente quanto hai messo da parte e quanto hai speso ogni mese. La tabella si aggiorna insieme ai movimenti dell'app.</div>
     <div class="tablewrap">
@@ -158,23 +158,23 @@ body{padding-bottom:82px}
     <div class="tablehint">Scorri lateralmente sulla tabella se sei su iPhone.</div>
   </div>
 
-  <div class="card">
+  <div class="card" id="posizione">
     <h2 style="margin-top:0">📦 Dove sono i soldi?</h2>
     <div class="row"><span>Salvadanaio</span><strong id="piggy">€75,00</strong></div>
     <div class="row" style="margin-top:10px"><span>Portafoglio</span><strong id="wallet">€115,00</strong></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="movimenti">
     <h2 style="margin-top:0">🧾 Movimenti</h2>
     <div id="history" class="history"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="progressi">
     <h2 style="margin-top:0">🔔 Progressi</h2>
     <div id="alerts"></div>
   </div>
 
-  <div class="card">
+  <div class="card" id="sicurezza">
     <h2 style="margin-top:0">🔐 Sicurezza</h2>
     <div class="note">Imposta un PIN di 4 cifre per impedire l'accesso all'app sul tuo dispositivo.</div>
     <label>Nuovo PIN (4 cifre)<input id="newPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••"></label>
@@ -184,7 +184,7 @@ body{padding-bottom:82px}
     </div>
   </div>
 
-  <div class="card">
+  <div class="card" id="reset">
     <div class="actions">
       <button class="danger" onclick="resetApp()">Azzera tutti i dati</button>
     </div>
@@ -402,60 +402,21 @@ render();checkPin();
 
 
 
-<nav class="bottomNav" id="bottomNav">
-  <button class="bottomItem active" data-screen="home"><span class="navIcon">🏠</span><span>Home</span></button>
-  <button class="bottomItem" data-screen="obiettivi"><span class="navIcon">🎯</span><span>Obiettivi</span></button>
-  <button class="bottomItem" data-screen="soldi"><span class="navIcon">💶</span><span>Soldi</span></button>
-  <button class="bottomItem" data-screen="tabella"><span class="navIcon">📋</span><span>Tabella</span></button>
-  <button class="bottomItem" id="moreButton"><span class="navIcon">☰</span><span>Altro</span></button>
+</body>
+</html><nav class="bottomNav" id="bottomNav">
+<a class="bottomItem" href="#home"><span class="navIcon">🏠</span><span>Home</span></a>
+<a class="bottomItem" href="#home"><span class="navIcon">🎯</span><span>Obiettivi</span></a>
+<a class="bottomItem" href="#soldi"><span class="navIcon">💶</span><span>Soldi</span></a>
+<a class="bottomItem" href="#tabella"><span class="navIcon">📋</span><span>Tabella</span></a>
+<button class="bottomItem" id="moreButton" type="button"><span class="navIcon">☰</span><span>Altro</span></button>
 </nav>
 <div class="bottomMore" id="bottomMore">
-  <button class="moreItem" data-screen="movimenti">🧾 Movimenti</button>
-  <button class="moreItem" data-screen="grafici">📊 Grafici</button>
-  <button class="moreItem" data-screen="posizione">📍 Dove sono i soldi</button>
-  <button class="moreItem" data-screen="impostazioni">⚙️ Impostazioni</button>
+<a class="moreItem" href="#movimenti">🧾 Movimenti</a>
+<a class="moreItem" href="#andamento">📊 Grafici</a>
+<a class="moreItem" href="#posizione">📍 Dove sono i soldi</a>
+<a class="moreItem" href="#sicurezza">⚙️ Impostazioni</a>
 </div>
-
-
 <script>
-(function(){
-  const items=[...document.querySelectorAll('.bottomItem[data-screen]')];
-  const more=document.getElementById('moreButton');
-  const morePanel=document.getElementById('bottomMore');
-  const moreItems=[...document.querySelectorAll('.moreItem[data-screen]')];
-
-  function cards(){return [...document.querySelectorAll('main .card')]}
-  function txt(c){return (c.innerText||'').toLowerCase()}
-  function pick(words){return cards().find(c=>words.some(w=>txt(c).includes(w)))}
-
-  function show(screen){
-    let targets=[];
-    if(screen==='home') targets=cards().slice(0,3);
-    else if(screen==='obiettivi') targets=cards().filter(c=>/napoli|fantacalcio|motorino/.test(txt(c)));
-    else if(screen==='soldi') targets=[pick(['gestisci i miei soldi','aggiungi soldi','preleva'])];
-    else if(screen==='tabella') targets=[pick(['tabella dei risparmi'])];
-    else if(screen==='movimenti') targets=[pick(['movimenti','cronologia','storico'])];
-    else if(screen==='grafici') targets=cards().filter(c=>/grafico|andamento|mensile|statistic/.test(txt(c)));
-    else if(screen==='posizione') targets=[pick(['dove sono i soldi','posizione dei soldi'])];
-    else if(screen==='impostazioni') targets=cards().filter(c=>/impostaz|pin|budget/.test(txt(c)));
-
-    targets=targets.filter(Boolean);
-    cards().forEach(c=>c.style.display=targets.length?(targets.includes(c)?'':'none'):'');
-    [...items].forEach(i=>i.classList.toggle('active',i.dataset.screen===screen));
-    morePanel.classList.remove('open');
-    if(targets.length) setTimeout(()=>targets[0].scrollIntoView({behavior:'smooth',block:'start'}),30);
-    else window.scrollTo({top:0,behavior:'smooth'});
-  }
-
-  items.forEach(i=>i.addEventListener('click',()=>show(i.dataset.screen)));
-  moreItems.forEach(i=>i.addEventListener('click',()=>show(i.dataset.screen)));
-  more.addEventListener('click',()=>morePanel.classList.toggle('open'));
-  document.addEventListener('click',e=>{
-    if(!e.target.closest('#bottomMore') && !e.target.closest('#moreButton')) morePanel.classList.remove('open');
-  });
-  window.addEventListener('load',()=>show('home'));
-})();
+(()=>{const b=document.getElementById('moreButton'),p=document.getElementById('bottomMore');b.onclick=()=>p.classList.toggle('open');document.querySelectorAll('.moreItem').forEach(a=>a.onclick=()=>p.classList.remove('open'));})();
 </script>
-
 </body>
-</html>
