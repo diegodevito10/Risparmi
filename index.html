@@ -3,128 +3,54 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b1220">
+<meta name="theme-color" content="#0b0d10">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="I miei risparmi">
 <link rel="manifest" href="manifest.webmanifest">
 <title>I miei risparmi</title>
 <style>
-:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;color:#101828;background:#f4f6f8}
-*{box-sizing:border-box}body{margin:0}.wrap{max-width:760px;margin:auto;padding:18px 16px 40px}
-h1{margin:8px 0 4px;font-size:30px}.sub{color:#667085;margin-bottom:18px}
-.card{background:white;border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 4px 18px #0000000d}
-.total{font-size:34px;font-weight:800}.muted{color:#667085}.grid{display:grid;grid-template-columns:1fr;gap:12px}
-.fund{border:1px solid #e4e7ec;border-radius:16px;padding:15px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
-.bar{height:9px;background:#e9edf2;border-radius:99px;overflow:hidden;margin:10px 0}.fill{height:100%;background:#111827;border-radius:99px}
-button{border:0;border-radius:12px;padding:12px 15px;font-size:15px;font-weight:700;background:#111827;color:white}
-button.secondary{background:#eef1f5;color:#111827}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-input,select{width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:12px;font-size:16px;margin-top:6px;background:white}
-label{display:block;margin:12px 0 0;font-weight:650;font-size:14px}.history{font-size:14px}.item{padding:12px 0;border-bottom:1px solid #eee}.item:last-child{border-bottom:0}
-.plus{color:#067647;font-weight:800}.minus{color:#b42318;font-weight:800}.note{font-size:13px;color:#667085}
-.small{font-size:13px}.pill{background:#eef1f5;padding:5px 9px;border-radius:99px;font-size:12px}
+:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;color:#f5f7fa;background:#0b0d10;--bg:#0b0d10;--card:#15181d;--card2:#1b1f25;--text:#f5f7fa;--muted:#9da5b0;--line:#2a3038;--accent:#3b82f6;--danger:#f87171;--success:#4ade80}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text)}.wrap{max-width:760px;margin:auto;padding:18px 16px 50px}
+h1{margin:8px 0 4px;font-size:30px}.sub{color:var(--muted);margin-bottom:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 5px 22px #00000025}
+.total{font-size:32px;font-weight:800}.muted,.note{color:var(--muted)}.note{font-size:13px}.grid{display:grid;grid-template-columns:1fr;gap:12px}
+.fund{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}.bar{height:9px;background:#292f38;border-radius:99px;overflow:hidden;margin:10px 0}.fill{height:100%;background:var(--accent);border-radius:99px}
+button{border:0;border-radius:12px;padding:12px 15px;font-size:15px;font-weight:700;background:var(--accent);color:white}button.secondary{background:#252a32;color:var(--text);border:1px solid var(--line)}button.danger{background:#3a2024;color:#ffb4b4;border:1px solid #63333a}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font-size:16px;margin-top:6px;background:var(--card2);color:var(--text)}label{display:block;margin:12px 0 0;font-weight:650;font-size:14px}
+.history{font-size:14px}.item{padding:12px 0;border-bottom:1px solid var(--line)}.item:last-child{border-bottom:0}.plus{color:var(--success);font-weight:800}.minus{color:var(--danger);font-weight:800}
+.pill{background:#252a32;padding:5px 9px;border-radius:99px;font-size:12px;color:var(--muted)}.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:13px}.stat strong{display:block;font-size:20px;margin-top:4px}
+.chart{display:flex;align-items:flex-end;gap:12px;height:180px;padding:10px 4px 0;border-bottom:1px solid var(--line)}.chartcol{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}.chartbar{width:min(46px,75%);min-height:3px;background:var(--accent);border-radius:8px 8px 2px 2px}.chartlabel{font-size:12px;color:var(--muted);margin-top:7px;text-align:center}.chartvalue{font-size:11px;margin-bottom:4px;color:var(--muted)}
+.categoryrow{display:flex;align-items:center;gap:10px;margin:9px 0}.categoryrow .catname{width:120px;font-size:13px}.cattrack{height:8px;background:#292f38;border-radius:99px;overflow:hidden;flex:1}.catfill{height:100%;background:#64748b}
+.lock{position:fixed;inset:0;background:#0b0d10;z-index:9999;display:none;align-items:center;justify-content:center;padding:25px}.lockbox{width:min(420px,100%);text-align:center}.lockbox input{text-align:center;font-size:24px;letter-spacing:8px}.hidden{display:none!important}
 @media(min-width:600px){.grid{grid-template-columns:1fr 1fr}}
 </style>
-
-<style>
-:root{
-  color-scheme:dark;
-  --bg:#0b0d10;
-  --card:#15181d;
-  --card2:#1b1f25;
-  --text:#f5f7fa;
-  --muted:#9da5b0;
-  --line:#2a3038;
-  --accent:#3b82f6;
-  --accent2:#60a5fa;
-  --danger:#f87171;
-  --success:#4ade80;
-}
-html,body{
-  background:var(--bg)!important;
-  color:var(--text)!important;
-}
-body{
-  min-height:100vh;
-}
-.card,.fund,.item{
-  background:var(--card)!important;
-  border-color:var(--line)!important;
-  color:var(--text)!important;
-}
-input,select,textarea{
-  background:var(--card2)!important;
-  color:var(--text)!important;
-  border:1px solid var(--line)!important;
-}
-input::placeholder,textarea::placeholder{
-  color:#747d89!important;
-}
-button{
-  background:var(--accent)!important;
-  color:white!important;
-  border:0!important;
-}
-button.secondary{
-  background:#252a32!important;
-  color:var(--text)!important;
-  border:1px solid var(--line)!important;
-}
-button:active{
-  transform:scale(.98);
-}
-.muted,.note{
-  color:var(--muted)!important;
-}
-.total{
-  color:var(--text)!important;
-}
-.bar{
-  background:#292f38!important;
-}
-.fill{
-  background:var(--accent)!important;
-}
-.plus{color:var(--success)!important}
-.minus{color:var(--danger)!important}
-h1,h2,h3,strong,label,span{
-  color:inherit;
-}
-hr{
-  border-color:var(--line)!important;
-}
-a{
-  color:var(--accent2)!important;
-}
-</style>
-
 </head>
 <body>
-<div class="wrap">
+<div id="lockScreen" class="lock"><div class="lockbox">
+  <div style="font-size:54px">🔐</div><h2>Inserisci il PIN</h2><div class="note">I tuoi dati restano salvati sul dispositivo.</div>
+  <input id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
+  <div class="actions" style="justify-content:center"><button onclick="unlock()">Sblocca</button></div>
+  <div id="pinError" class="note" style="color:#f87171;margin-top:10px"></div>
+</div></div>
+
+<div class="wrap" id="app">
   <h1>💰 I miei risparmi</h1>
-  <div class="sub">Controlla Napoli, Fantacalcio e Motorino.</div>
+  <div class="sub">Controlla i tuoi soldi, le spese e i tuoi obiettivi.</div>
 
   <div class="card">
     <div class="row" style="align-items:flex-start">
-      <div style="flex:1">
-        <div class="muted">👛 I miei soldi</div>
-        <div id="personalWallet" class="total">€115,00</div>
-        <div class="note">Disponibili per uscite e acquisti</div>
-      </div>
-      <div style="flex:1;text-align:right">
-        <div class="muted">💰 Totale risparmiato</div>
-        <div id="grandTotal" class="total">€75,00</div>
-        <div class="note">Napoli + Fantacalcio + Motorino</div>
-      </div>
+      <div style="flex:1"><div class="muted">👛 I miei soldi</div><div id="personalWallet" class="total">€115,00</div><div class="note">Disponibili per uscite e acquisti</div></div>
+      <div style="flex:1;text-align:right"><div class="muted">💰 Totale risparmiato</div><div id="grandTotal" class="total">€75,00</div><div class="note">Napoli + Fantacalcio + Motorino</div></div>
     </div>
+    <div style="height:1px;background:var(--line);margin:15px 0"></div>
+    <div class="row"><span class="muted">💵 Totale posseduto</span><strong id="totalOwned" style="font-size:22px">€190,00</strong></div>
   </div>
-<div id="funds" class="grid"></div>
-  </div>
+
+  <div id="funds" class="grid"></div>
 
   <div class="card">
     <h2 style="margin-top:0">🔄 Gestisci i miei soldi</h2>
-    <div class="note">Puoi spostare i soldi dal portafoglio ai salvadanai, riprenderli dai risparmi oppure spenderli.</div>
-
+    <div class="note">Sposta i soldi tra portafoglio e salvadanai, spendili o aggiungine di nuovi.</div>
     <label>Operazione
       <select id="moneyOperation" onchange="toggleMoneyFields()">
         <option value="save">Metti nei risparmi</option>
@@ -133,40 +59,70 @@ a{
         <option value="addwallet">Aggiungi soldi al portafoglio</option>
       </select>
     </label>
-
-    <label id="fundLabel">Salvadanaio
-      <select id="fundSelect"></select>
+    <label id="fundLabel">Salvadanaio<select id="fundSelect"></select></label>
+    <label>Importo (€)<input id="amount" type="number" inputmode="decimal" min="0" step="5" placeholder="es. 20"></label>
+    <label id="categoryLabel" class="hidden">Categoria
+      <select id="category"><option>🍔 Cibo</option><option>⚽ Calcio</option><option>🎮 Videogiochi</option><option>👕 Vestiti</option><option>🚌 Trasporti</option><option>🎉 Uscite</option><option>📱 Tecnologia</option><option>🛒 Altro</option></select>
     </label>
-
-    <label>Importo (€)
-      <input id="amount" type="number" inputmode="decimal" min="0" step="5" placeholder="es. 20">
-    </label>
-
-    <label id="locationLabel">Dove metti fisicamente i soldi?
-      <select id="location">
-        <option>Salvadanaio</option>
-        <option>Portafoglio</option>
-      </select>
-    </label>
-
-    <label>Nota (facoltativa)
-      <input id="note" type="text" placeholder="es. quota ottobre / uscita con amici">
-    </label>
-
+    <label id="locationLabel">Dove metti fisicamente i soldi?<select id="location"><option>Salvadanaio</option><option>Portafoglio</option></select></label>
+    <label>Nota (facoltativa)<input id="note" type="text" placeholder="es. quota ottobre / McDonald's con amici"></label>
     <div class="actions"><button onclick="manageMoney()">Conferma operazione</button></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">📅 Budget di questo mese</h2>
+    <label>Quanto vuoi poter spendere questo mese? (€)<input id="monthlyBudget" type="number" inputmode="decimal" min="0" step="5" placeholder="es. 100"></label>
+    <div class="statgrid" style="margin-top:12px">
+      <div class="stat"><span class="muted">Speso</span><strong id="monthSpent">€0</strong></div>
+      <div class="stat"><span class="muted">Disponibile</span><strong id="monthAvailable">—</strong></div>
+    </div>
+    <div class="bar"><div id="budgetBar" class="fill" style="width:0%"></div></div>
+    <div id="budgetText" class="note">Imposta un budget per controllare le spese del mese.</div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">📊 Come sono divisi i miei soldi</h2>
+    <div id="chart" class="chart"></div>
+    <div id="categoryChart" style="margin-top:18px"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">📈 Andamento mensile</h2>
+    <div class="note">Risparmi messi da parte e spese registrate per mese.</div>
+    <div id="monthlyChart" class="chart"></div>
   </div>
 
   <div class="card">
     <h2 style="margin-top:0">📦 Dove sono i soldi?</h2>
     <div class="row"><span>Salvadanaio</span><strong id="piggy">€75,00</strong></div>
     <div class="row" style="margin-top:10px"><span>Portafoglio</span><strong id="wallet">€115,00</strong></div>
-    <div class="note" style="margin-top:10px">Il portafoglio qui indica i soldi personali disponibili; i risparmi sono separati.</div>
   </div>
 
   <div class="card">
     <h2 style="margin-top:0">🧾 Movimenti</h2>
     <div id="history" class="history"></div>
-    <div class="actions"><button class="secondary" onclick="resetApp()">Azzera dati</button></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">🔔 Progressi</h2>
+    <div id="alerts"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">🔐 Sicurezza</h2>
+    <div class="note">Imposta un PIN di 4 cifre per impedire l'accesso all'app sul tuo dispositivo.</div>
+    <label>Nuovo PIN (4 cifre)<input id="newPin" type="password" inputmode="numeric" maxlength="4" placeholder="••••"></label>
+    <div class="actions">
+      <button onclick="setPin()">Salva PIN</button>
+      <button class="secondary" onclick="removePin()">Disattiva PIN</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="actions">
+      <button class="danger" onclick="resetApp()">Azzera tutti i dati</button>
+    </div>
+    <div class="note" style="margin-top:10px">Attenzione: questa operazione cancella movimenti, budget e impostazioni dell'app su questo dispositivo.</div>
   </div>
 </div>
 
@@ -174,101 +130,149 @@ a{
 const KEY="miei_risparmi_v2";
 const initial={
  funds:[
-  {id:"napoli",name:"Napoli",target:600,saved:75},
-  {id:"fanta",name:"Fantacalcio",target:150,saved:0},
-  {id:"motorino",name:"Motorino",target:1500,saved:0}
+  {id:"napoli",name:"🇮🇹 Napoli",target:600,saved:75,date:"2027-05-31"},
+  {id:"fanta",name:"⚽ Fantacalcio",target:150,saved:0,date:"2027-08-31"},
+  {id:"motorino",name:"🛵 Motorino",target:1500,saved:0,date:"2027-07-31"}
  ],
  locations:{Salvadanaio:75,Portafoglio:115},
- history:[{date:new Date().toLocaleDateString("it-IT"),fund:"Napoli",amount:75,location:"Salvadanaio",note:"Saldo iniziale: 3 quote già messe da parte"}],
  personalWallet:115,
+ history:[{date:new Date().toLocaleDateString("it-IT"),iso:new Date().toISOString(),fund:"🇮🇹 Napoli",amount:75,location:"Salvadanaio",note:"Saldo iniziale: 3 quote già messe da parte",type:"save"}],
+ monthlyBudget:{},
+ pin:"",
  walletHistory:[]
 };
-let data=JSON.parse(localStorage.getItem(KEY)||"null")||initial;
-if(typeof data.personalWallet !== "number") data.personalWallet=115;
-if(!Array.isArray(data.walletHistory)) data.walletHistory=[];
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||structuredClone(initial);
+
+function migrate(){
+ if(typeof data.personalWallet!=="number") data.personalWallet=115;
+ if(!data.locations)data.locations={Salvadanaio:0,Portafoglio:data.personalWallet};
+ data.locations.Portafoglio=data.personalWallet;
+ if(!Array.isArray(data.history))data.history=[];
+ if(!Array.isArray(data.funds))data.funds=structuredClone(initial.funds);
+ data.funds.forEach((f,i)=>{if(!f.date)f.date=initial.funds[i]?.date||"2027-12-31"});
+ if(!data.monthlyBudget)data.monthlyBudget={};
+ if(typeof data.pin!=="string")data.pin="";
+ if(!Array.isArray(data.walletHistory))data.walletHistory=[];
+ data.history.forEach(h=>{if(!h.iso)h.iso=new Date().toISOString();});
+}
+migrate();
+
 function euro(n){return new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR"}).format(n)}
-function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function monthKey(d=new Date()){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
+function monthName(key){const [y,m]=key.split("-");return new Date(Number(y),Number(m)-1,1).toLocaleDateString("it-IT",{month:"short"})}
+function save(){data.locations.Portafoglio=data.personalWallet;localStorage.setItem(KEY,JSON.stringify(data));render()}
+function currentMonthSpent(){const key=monthKey();return data.history.filter(h=>h.type==="spend"&&String(h.iso||"").slice(0,7)===key).reduce((s,h)=>s+Math.abs(h.amount),0)}
+function currentMonthSaved(){const key=monthKey();return data.history.filter(h=>h.type==="save"&&String(h.iso||"").slice(0,7)===key).reduce((s,h)=>s+h.amount,0)}
+
 function render(){
- const total=data.funds.reduce((s,f)=>s+f.saved,0);
+ const total=data.funds.reduce((s,f)=>s+Number(f.saved||0),0);
+ const owned=total+data.personalWallet;
  document.getElementById("grandTotal").textContent=euro(total);
  document.getElementById("personalWallet").textContent=euro(data.personalWallet);
- document.getElementById("piggy").textContent=euro(data.locations.Salvadanaio);
+ document.getElementById("totalOwned").textContent=euro(owned);
+ document.getElementById("piggy").textContent=euro(total);
  document.getElementById("wallet").textContent=euro(data.personalWallet);
+
  document.getElementById("funds").innerHTML=data.funds.map(f=>{
   const p=Math.min(100,(f.saved/f.target)*100);
+  const days=Math.ceil((new Date(f.date)-new Date())/86400000);
+  const monthly=days>0?Math.max(0,(f.target-f.saved)/(days/30.44)):Math.max(0,f.target-f.saved);
   return `<div class="fund"><div class="row"><strong>${f.name}</strong><strong>${euro(f.saved)}</strong></div>
-  <div class="bar"><div class="fill" style="width:${p}%"></div></div>
-  <div class="row"><span class="muted">${p.toFixed(0)}% dell'obiettivo</span><span class="muted">${euro(f.target)}</span></div></div>`
+   <div class="bar"><div class="fill" style="width:${p}%"></div></div>
+   <div class="row"><span class="muted">${p.toFixed(0)}% dell'obiettivo</span><span class="muted">${euro(f.target)}</span></div>
+   <div class="note" style="margin-top:8px">🎯 ${euro(f.target-f.saved)} mancanti · 📅 ${new Date(f.date).toLocaleDateString("it-IT")} · circa ${euro(monthly)}/mese</div></div>`;
  }).join("");
  document.getElementById("fundSelect").innerHTML=data.funds.map(f=>`<option value="${f.id}">${f.name}</option>`).join("");
- document.getElementById("history").innerHTML=data.history.slice().reverse().map(h=>
-  `<div class="item"><div class="row"><strong>${h.fund||h.type||"Movimento"}</strong><span class="${h.amount<0?"minus":"plus"}">${h.amount<0?"":"+"}${euro(h.amount)}</span></div>
-   <div class="note">${h.date}${h.location?" · "+h.location:""}${h.note?" · "+h.note:""}</div></div>`
- ).join("")||"<div class='muted'>Nessun movimento.</div>";
+
+ const budget=Number(data.monthlyBudget[monthKey()]||0), spent=currentMonthSpent(), avail=budget-spent;
+ document.getElementById("monthlyBudget").value=budget||"";
+ document.getElementById("monthSpent").textContent=euro(spent);
+ document.getElementById("monthAvailable").textContent=budget?euro(Math.max(0,avail)):"—";
+ const pct=budget?Math.min(100,spent/budget*100):0;
+ document.getElementById("budgetBar").style.width=pct+"%";
+ document.getElementById("budgetText").textContent=budget?(spent>budget?`Hai superato il budget di ${euro(spent-budget)}.`:`Hai usato il ${pct.toFixed(0)}% del budget.`):"Imposta un budget per controllare le spese del mese.";
+
+ document.getElementById("chart").innerHTML=data.funds.map(f=>{
+  const totalForChart=Math.max(owned,1), pct=Math.max(2,f.saved/totalForChart*100);
+  return `<div class="chartcol"><div class="chartvalue">${euro(f.saved)}</div><div class="chartbar" style="height:${pct}%"></div><div class="chartlabel">${f.name.replace(/^\\S+\\s/,"")}</div></div>`;
+ }).join("")+`<div class="chartcol"><div class="chartvalue">${euro(data.personalWallet)}</div><div class="chartbar" style="height:${Math.max(2,data.personalWallet/Math.max(owned,1)*100)}%"></div><div class="chartlabel">Portafoglio</div></div>`;
+
+ const cats=["🍔 Cibo","⚽ Calcio","🎮 Videogiochi","👕 Vestiti","🚌 Trasporti","🎉 Uscite","📱 Tecnologia","🛒 Altro"];
+ const totals={};cats.forEach(c=>totals[c]=0);
+ data.history.filter(h=>h.type==="spend").forEach(h=>{if(totals[h.category]!==undefined)totals[h.category]+=Math.abs(h.amount)});
+ const maxCat=Math.max(1,...Object.values(totals));
+ document.getElementById("categoryChart").innerHTML="<div class='muted' style='margin-bottom:8px'>Spese per categoria</div>"+cats.map(c=>`<div class="categoryrow"><span class="catname">${c}</span><div class="cattrack"><div class="catfill" style="width:${totals[c]/maxCat*100}%"></div></div><span class="note">${euro(totals[c])}</span></div>`).join("");
+
+ const monthMap={};
+ data.history.forEach(h=>{const k=String(h.iso||"").slice(0,7);if(!k)return;if(!monthMap[k])monthMap[k]={save:0,spend:0};if(h.type==="save")monthMap[k].save+=Math.max(0,h.amount);if(h.type==="spend")monthMap[k].spend+=Math.abs(h.amount)});
+ const keys=Object.keys(monthMap).sort().slice(-6); const maxM=Math.max(1,...keys.flatMap(k=>[monthMap[k].save,monthMap[k].spend]));
+ document.getElementById("monthlyChart").innerHTML=keys.length?keys.map(k=>`<div class="chartcol"><div class="chartvalue">+${euro(monthMap[k].save)}</div><div class="chartbar" style="height:${Math.max(2,monthMap[k].save/maxM*75)}%"></div><div class="chartlabel">${monthName(k)}<br><span style="color:#f87171">−${euro(monthMap[k].spend)}</span></div></div>`).join(""):"<div class='muted'>Registra qualche movimento per vedere l'andamento.</div>";
+
+ document.getElementById("history").innerHTML=data.history.slice().reverse().map(h=>{
+  const amount=Number(h.amount); const title=h.fund||"Movimento";
+  return `<div class="item"><div class="row"><strong>${title}</strong><span class="${amount<0?"minus":"plus"}">${amount<0?"":"+"}${euro(amount)}</span></div><div class="note">${h.date}${h.category?" · "+h.category:""}${h.location?" · "+h.location:""}${h.note?" · "+h.note:""}</div></div>`;
+ }).join("")||"<div class='muted'>Nessun movimento.</div>";
+
+ const alerts=[];
+ data.funds.forEach(f=>{const missing=f.target-f.saved;if(missing<=0)alerts.push(`🎉 Hai raggiunto ${f.name}!`);else alerts.push(`🎯 ${f.name}: mancano ${euro(missing)}. Circa ${euro(Math.max(0,missing/Math.max(1,(new Date(f.date)-new Date())/86400000)*30.44))}/mese per arrivare alla data.`)});
+ if(budget&&spent>budget)alerts.unshift(`⚠️ Budget superato: ${euro(spent-budget)} oltre il limite.`);
+ else if(budget)alerts.unshift(`📅 Questo mese hai speso ${euro(spent)} su ${euro(budget)}.`);
+ document.getElementById("alerts").innerHTML=alerts.map(x=>`<div style="padding:9px 0;border-bottom:1px solid var(--line)">${x}</div>`).join("");
+
  toggleMoneyFields();
 }
+
 function toggleMoneyFields(){
  const op=document.getElementById("moneyOperation").value;
- const fundLabel=document.getElementById("fundLabel");
- const locationLabel=document.getElementById("locationLabel");
- fundLabel.style.display=(op==="save"||op==="withdraw")?"block":"none";
- locationLabel.style.display=(op==="save")?"block":"none";
+ document.getElementById("fundLabel").classList.toggle("hidden",!(op==="save"||op==="withdraw"));
+ document.getElementById("locationLabel").classList.toggle("hidden",op!=="save");
+ document.getElementById("categoryLabel").classList.toggle("hidden",op!=="spend");
 }
 function manageMoney(){
- const op=document.getElementById("moneyOperation").value;
- const amount=parseFloat(document.getElementById("amount").value);
- const note=document.getElementById("note").value.trim();
- const id=document.getElementById("fundSelect").value;
- const location=document.getElementById("location").value;
+ const op=document.getElementById("moneyOperation").value, amount=parseFloat(document.getElementById("amount").value);
+ const note=document.getElementById("note").value.trim(), id=document.getElementById("fundSelect").value;
+ const location=document.getElementById("location").value, category=document.getElementById("category").value;
  if(!amount||amount<=0){alert("Inserisci un importo valido.");return}
-
- const today=new Date().toLocaleDateString("it-IT");
- const f=data.funds.find(x=>x.id===id);
-
+ const now=new Date(), today=now.toLocaleDateString("it-IT"), iso=now.toISOString(), f=data.funds.find(x=>x.id===id);
  if(op==="save"){
-  if(amount>data.personalWallet){
-   alert("Non puoi mettere nei risparmi più soldi di quelli che hai nel portafoglio.");return
-  }
+  if(amount>data.personalWallet){alert("Non puoi mettere nei risparmi più soldi di quelli presenti nel portafoglio.");return}
+  data.personalWallet-=amount; f.saved+=amount; data.locations.Salvadanaio+=amount;
+  data.history.push({date:today,iso,fund:f.name,amount,location:"Portafoglio → Salvadanaio",note:note||"Soldi messi nei risparmi",type:"save"});
+ }else if(op==="withdraw"){
+  if(amount>f.saved){alert("Non puoi togliere più soldi di quelli presenti in questo salvadanaio.");return}
+  f.saved-=amount; data.personalWallet+=amount; data.locations.Salvadanaio-=amount;
+  data.history.push({date:today,iso,fund:f.name,amount:-amount,location:"Salvadanaio → Portafoglio",note:note||"Soldi ripresi dai risparmi",type:"withdraw"});
+ }else if(op==="spend"){
+  if(amount>data.personalWallet){alert("Non puoi spendere più dei soldi presenti nel portafoglio.");return}
   data.personalWallet-=amount;
-  f.saved+=amount;
-  data.locations.Salvadanaio+=amount;
-  data.history.push({date:today,fund:f.name,amount,location:"Dal portafoglio → Salvadanaio",note:note||"Soldi messi nei risparmi"});
- }
- else if(op==="withdraw"){
-  if(amount>f.saved){
-   alert("Non puoi togliere più soldi di quelli presenti in questo salvadanaio.");return
-  }
-  f.saved-=amount;
+  data.history.push({date:today,iso,fund:"👛 Portafoglio",amount:-amount,location:"Acquisto / spesa",category,note:note||"Acquisto",type:"spend"});
+ }else{
   data.personalWallet+=amount;
-  data.locations.Salvadanaio-=amount;
-  data.history.push({date:today,fund:f.name,amount:-amount,location:"Salvadanaio → Portafoglio",note:note||"Soldi ripresi dai risparmi"});
+  data.history.push({date:today,iso,fund:"👛 Portafoglio",amount,location:"Entrata",note:note||"Soldi aggiunti al portafoglio",type:"income"});
  }
- else if(op==="spend"){
-  if(amount>data.personalWallet){
-   alert("Non puoi spendere più dei soldi presenti nel portafoglio.");return
-  }
-  data.personalWallet-=amount;
-  data.history.push({date:today,fund:"Portafoglio",amount:-amount,location:"Acquisto / spesa",note:note||"Acquisto"});
- }
- else if(op==="addwallet"){
-  data.personalWallet+=amount;
-  data.history.push({date:today,fund:"Portafoglio",amount:amount,location:"Entrata",note:note||"Soldi aggiunti al portafoglio"});
- }
-
- data.locations.Portafoglio=data.personalWallet;
- document.getElementById("amount").value="";
- document.getElementById("note").value="";
- save();
+ document.getElementById("amount").value="";document.getElementById("note").value="";save();
 }
+document.getElementById("monthlyBudget").addEventListener("change",function(){
+ const v=Math.max(0,parseFloat(this.value)||0);data.monthlyBudget[monthKey()]=v;save();
+});
+function setPin(){
+ const p=document.getElementById("newPin").value.trim();
+ if(!/^\d{4}$/.test(p)){alert("Il PIN deve essere composto da 4 cifre.");return}
+ data.pin=p;document.getElementById("newPin").value="";save();alert("PIN salvato.");
+}
+function removePin(){if(!data.pin){alert("Non hai un PIN attivo.");return}if(confirm("Vuoi disattivare il PIN?")){data.pin="";save();}}
+function unlock(){
+ const p=document.getElementById("pinInput").value;
+ if(p===data.pin){sessionStorage.setItem("risparmiUnlocked","1");document.getElementById("lockScreen").style.display="none";document.getElementById("pinError").textContent="";document.getElementById("pinInput").value=""}
+ else document.getElementById("pinError").textContent="PIN non corretto.";
+}
+function checkPin(){if(data.pin&&sessionStorage.getItem("risparmiUnlocked")!=="1")document.getElementById("lockScreen").style.display="flex";}
 function resetApp(){
  if(confirm("Vuoi davvero cancellare tutti i dati dell'app?")){
-  localStorage.removeItem(KEY);
-  data=JSON.parse(JSON.stringify(initial));
-  data.history[0].date=new Date().toLocaleDateString("it-IT");
-  render();
+  localStorage.removeItem(KEY);data=structuredClone(initial);data.history[0].date=new Date().toLocaleDateString("it-IT");data.history[0].iso=new Date().toISOString();render();sessionStorage.removeItem("risparmiUnlocked");
  }
 }
-render();
+render();checkPin();
 </script>
 </body>
 </html>
