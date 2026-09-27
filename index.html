@@ -72,7 +72,7 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 .menuPage.active{display:block}
 
 </style>
-</head>
+<style>main .card{scroll-margin-top:78px}</style></head>
 
 <body>
 <button class="menuBtn" id="menuBtn" aria-label="Apri menu"><span>☰</span></button>
@@ -429,52 +429,36 @@ render();checkPin();
 
 // ===== NAVIGAZIONE MENU =====
 (function(){
-  const btn=document.getElementById("menuBtn"), close=document.getElementById("menuClose"),
-        menu=document.getElementById("sideMenu"), overlay=document.getElementById("menuOverlay");
-  const items=[...document.querySelectorAll(".menuItem")];
-  function openMenu(){menu.classList.add("open");overlay.classList.add("open")}
-  function closeMenu(){menu.classList.remove("open");overlay.classList.remove("open")}
-  btn.addEventListener("click",openMenu); close.addEventListener("click",closeMenu); overlay.addEventListener("click",closeMenu);
+ const btn=document.getElementById("menuBtn"), close=document.getElementById("menuClose");
+ const menu=document.getElementById("sideMenu"), overlay=document.getElementById("menuOverlay");
+ const items=[...document.querySelectorAll(".menuItem")];
+ const open=()=>{menu.classList.add("open");overlay.classList.add("open")};
+ const shut=()=>{menu.classList.remove("open");overlay.classList.remove("open")};
+ btn.addEventListener("click",open); close.addEventListener("click",shut); overlay.addEventListener("click",shut);
 
-  function cards(){
-    return [...document.querySelectorAll("main .card")];
-  }
-  function findCard(text){
-    return cards().find(c=>(c.innerText||"").toLowerCase().includes(text.toLowerCase()));
-  }
-  function showPage(page){
-    const all=cards();
-    all.forEach(c=>c.style.display="none");
-    // Header/summary elements remain visible on Home.
-    const homeWords=["portafoglio","totale risparmi","obiettivo","progress"];
-    if(page==="home"){
-      all.forEach(c=>{
-        const t=(c.innerText||"").toLowerCase();
-        if(homeWords.some(w=>t.includes(w))) c.style.display="";
-      });
-    } else if(page==="obiettivi"){
-      all.forEach(c=>{const t=(c.innerText||"").toLowerCase(); if(t.includes("napoli")||t.includes("fantacalcio")||t.includes("motorino")) c.style.display="";});
-    } else if(page==="soldi"){
-      const c=findCard("gestisci i miei soldi"); if(c)c.style.display="";
-    } else if(page==="tabella"){
-      const c=findCard("tabella dei risparmi"); if(c)c.style.display="";
-    } else if(page==="movimenti"){
-      const c=findCard("movimenti"); if(c)c.style.display="";
-    } else if(page==="grafici"){
-      all.forEach(c=>{const t=(c.innerText||"").toLowerCase(); if(t.includes("graf")||t.includes("andamento")||t.includes("mensile")) c.style.display="";});
-    } else if(page==="posizione"){
-      const c=findCard("dove sono i soldi"); if(c)c.style.display="";
-    } else if(page==="impostazioni"){
-      all.forEach(c=>{const t=(c.innerText||"").toLowerCase(); if(t.includes("impostaz")||t.includes("pin")||t.includes("budget")) c.style.display="";});
-    }
-    items.forEach(i=>i.classList.toggle("active",i.dataset.page===page));
-    closeMenu();
-    window.scrollTo({top:0,behavior:"smooth"});
-  }
-  items.forEach(i=>i.addEventListener("click",()=>showPage(i.dataset.page)));
-  window.addEventListener("load",()=>showPage("home"));
+ function cards(){return [...document.querySelectorAll("main .card")]}
+ function text(c){return (c.innerText||c.textContent||"").toLowerCase()}
+ function pick(words){return cards().find(c=>words.some(w=>text(c).includes(w)))}
+ function go(page){
+   let targets=[];
+   if(page==="home") targets=cards().slice(0,3);
+   else if(page==="obiettivi") targets=cards().filter(c=>/napoli|fantacalcio|motorino/.test(text(c)));
+   else if(page==="soldi") targets=[pick(["gestisci i miei soldi","aggiungi soldi","preleva"])];
+   else if(page==="tabella") targets=[pick(["tabella dei risparmi"])];
+   else if(page==="movimenti") targets=[pick(["movimenti","cronologia","storico"])];
+   else if(page==="grafici") targets=cards().filter(c=>/grafico|andamento|mensile|statistic/.test(text(c)));
+   else if(page==="posizione") targets=[pick(["dove sono i soldi","posizione dei soldi"])];
+   else if(page==="impostazioni") targets=cards().filter(c=>/impostaz|pin|budget/.test(text(c)));
+   targets=targets.filter(Boolean);
+   cards().forEach(c=>c.style.display=targets.length?(targets.includes(c)?"":"none"):"");
+   if(targets.length) setTimeout(()=>targets[0].scrollIntoView({behavior:"smooth",block:"start"}),40);
+   else window.scrollTo({top:0,behavior:"smooth"});
+   items.forEach(i=>i.classList.toggle("active",i.dataset.page===page));
+   shut();
+ }
+ items.forEach(i=>i.addEventListener("click",e=>{e.preventDefault();go(i.dataset.page)}));
+ window.appMenuGo=go;
 })();
-
 </script>
 </body>
 </html>
