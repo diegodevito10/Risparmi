@@ -36,67 +36,60 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 .tablehint{margin-top:9px;font-size:12px;color:var(--muted)}
 
 
-/* ===== MENU LATERALE ===== */
+/* ===== SIMPLE APP MENU ===== */
 .menuBtn{
-  position:fixed;top:14px;left:14px;z-index:1002;
-  width:44px;height:44px;border:1px solid var(--line);border-radius:13px;
-  background:var(--card);color:var(--text);font-size:24px;line-height:1;
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
-  box-shadow:0 6px 20px rgba(0,0,0,.22)
+ position:fixed;top:12px;left:12px;z-index:5000;width:44px;height:44px;
+ border:1px solid var(--line);border-radius:13px;background:var(--card);
+ color:var(--text);font-size:24px;display:flex;align-items:center;
+ justify-content:center;box-shadow:0 5px 18px rgba(0,0,0,.28)
 }
-.menuBtn span{display:block;margin-top:-3px}
-.appTop{padding-top:70px}
-.sideMenu{
-  position:fixed;inset:0 auto 0 0;width:min(310px,86vw);z-index:1001;
-  background:var(--bg);border-right:1px solid var(--line);
-  transform:translateX(-105%);transition:transform .22s ease;
-  box-shadow:14px 0 35px rgba(0,0,0,.35);overflow-y:auto;padding:72px 14px 24px
+.drawer{
+ position:fixed;top:0;left:0;bottom:0;width:min(310px,88vw);z-index:4999;
+ background:var(--bg);border-right:1px solid var(--line);
+ transform:translateX(-110%);transition:transform .22s ease;
+ padding:70px 14px 20px;box-sizing:border-box;overflow:auto;
+ box-shadow:12px 0 30px rgba(0,0,0,.35)
 }
-.sideMenu.open{transform:translateX(0)}
-.menuOverlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;
-  opacity:0;pointer-events:none;transition:opacity .2s
+.drawer.open{transform:translateX(0)}
+.drawerOverlay{
+ position:fixed;inset:0;z-index:4998;background:rgba(0,0,0,.55);
+ opacity:0;pointer-events:none;transition:opacity .2s
 }
-.menuOverlay.open{opacity:1;pointer-events:auto}
-.menuTitle{font-size:21px;font-weight:800;margin:0 8px 18px}
-.menuSection{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:18px 8px 7px}
-.menuItem{
-  width:100%;display:flex;align-items:center;gap:12px;padding:13px 12px;
-  border:0;background:transparent;color:var(--text);border-radius:12px;
-  text-align:left;font-size:15px;cursor:pointer
+.drawerOverlay.open{opacity:1;pointer-events:auto}
+.drawerTitle{font-size:21px;font-weight:800;margin:0 8px 18px}
+.drawerLabel{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:18px 8px 7px}
+.drawerItem{
+ width:100%;border:0;background:transparent;color:var(--text);
+ display:flex;align-items:center;gap:12px;text-align:left;padding:13px 12px;
+ border-radius:12px;font-size:15px;margin:2px 0
 }
-.menuItem:hover,.menuItem.active{background:var(--card2)}
-.menuIcon{width:25px;text-align:center;font-size:19px}
-.menuClose{position:absolute;top:14px;right:14px}
-.menuPage{display:none}
-.menuPage.active{display:block}
+.drawerItem.active{background:var(--card2)}
+.drawerIcon{width:25px;text-align:center;font-size:19px}
+.appScreen{display:none}
+.appScreen.active{display:block}
+body{padding-top:64px}
 
 </style>
-<style>main .card{scroll-margin-top:78px}</style></head>
-
+</head>
 <body>
-<button class="menuBtn" id="menuBtn" aria-label="Apri menu"><span>☰</span></button>
-<div class="menuOverlay" id="menuOverlay"></div>
-<aside class="sideMenu" id="sideMenu">
-  <button class="menuBtn menuClose" id="menuClose" aria-label="Chiudi menu"><span>×</span></button>
-  <div class="menuTitle">💰 I miei Risparmi</div>
 
-  <div class="menuSection">Panoramica</div>
-  <button class="menuItem active" data-page="home"><span class="menuIcon">🏠</span>Home</button>
-  <button class="menuItem" data-page="obiettivi"><span class="menuIcon">🎯</span>Obiettivi</button>
-
-  <div class="menuSection">Gestione</div>
-  <button class="menuItem" data-page="soldi"><span class="menuIcon">💶</span>Gestisci i miei soldi</button>
-  <button class="menuItem" data-page="tabella"><span class="menuIcon">📋</span>Tabella risparmi</button>
-  <button class="menuItem" data-page="movimenti"><span class="menuIcon">🧾</span>Movimenti</button>
-
-  <div class="menuSection">Analisi</div>
-  <button class="menuItem" data-page="grafici"><span class="menuIcon">📊</span>Grafici e statistiche</button>
-  <button class="menuItem" data-page="posizione"><span class="menuIcon">📍</span>Dove sono i soldi?</button>
-
-  <div class="menuSection">Impostazioni</div>
-  <button class="menuItem" data-page="impostazioni"><span class="menuIcon">⚙️</span>Impostazioni</button>
-</aside>
+<button id="hamburger" class="menuBtn" aria-label="Apri menu">☰</button>
+<div id="drawerOverlay" class="drawerOverlay"></div>
+<nav id="drawer" class="drawer">
+  <div class="drawerTitle">💰 I miei Risparmi</div>
+  <div class="drawerLabel">Panoramica</div>
+  <button class="drawerItem active" data-screen="home"><span class="drawerIcon">🏠</span>Home</button>
+  <button class="drawerItem" data-screen="obiettivi"><span class="drawerIcon">🎯</span>Obiettivi</button>
+  <div class="drawerLabel">Gestione</div>
+  <button class="drawerItem" data-screen="soldi"><span class="drawerIcon">💶</span>Gestisci i miei soldi</button>
+  <button class="drawerItem" data-screen="tabella"><span class="drawerIcon">📋</span>Tabella risparmi</button>
+  <button class="drawerItem" data-screen="movimenti"><span class="drawerIcon">🧾</span>Movimenti</button>
+  <div class="drawerLabel">Analisi</div>
+  <button class="drawerItem" data-screen="grafici"><span class="drawerIcon">📊</span>Grafici e statistiche</button>
+  <button class="drawerItem" data-screen="posizione"><span class="drawerIcon">📍</span>Dove sono i soldi?</button>
+  <div class="drawerLabel">Altro</div>
+  <button class="drawerItem" data-screen="impostazioni"><span class="drawerIcon">⚙️</span>Impostazioni</button>
+</nav>
 
 <div id="lockScreen" class="lock"><div class="lockbox">
   <div style="font-size:54px">🔐</div><h2>Inserisci il PIN</h2><div class="note">I tuoi dati restano salvati sul dispositivo.</div>
@@ -426,39 +419,71 @@ function resetApp(){
  }
 }
 render();checkPin();
+</script>
 
-// ===== NAVIGAZIONE MENU =====
+<script>
 (function(){
- const btn=document.getElementById("menuBtn"), close=document.getElementById("menuClose");
- const menu=document.getElementById("sideMenu"), overlay=document.getElementById("menuOverlay");
- const items=[...document.querySelectorAll(".menuItem")];
- const open=()=>{menu.classList.add("open");overlay.classList.add("open")};
- const shut=()=>{menu.classList.remove("open");overlay.classList.remove("open")};
- btn.addEventListener("click",open); close.addEventListener("click",shut); overlay.addEventListener("click",shut);
+  const drawer=document.getElementById('drawer');
+  const overlay=document.getElementById('drawerOverlay');
+  const hamburger=document.getElementById('hamburger');
+  const items=[...document.querySelectorAll('.drawerItem')];
 
- function cards(){return [...document.querySelectorAll("main .card")]}
- function text(c){return (c.innerText||c.textContent||"").toLowerCase()}
- function pick(words){return cards().find(c=>words.some(w=>text(c).includes(w)))}
- function go(page){
-   let targets=[];
-   if(page==="home") targets=cards().slice(0,3);
-   else if(page==="obiettivi") targets=cards().filter(c=>/napoli|fantacalcio|motorino/.test(text(c)));
-   else if(page==="soldi") targets=[pick(["gestisci i miei soldi","aggiungi soldi","preleva"])];
-   else if(page==="tabella") targets=[pick(["tabella dei risparmi"])];
-   else if(page==="movimenti") targets=[pick(["movimenti","cronologia","storico"])];
-   else if(page==="grafici") targets=cards().filter(c=>/grafico|andamento|mensile|statistic/.test(text(c)));
-   else if(page==="posizione") targets=[pick(["dove sono i soldi","posizione dei soldi"])];
-   else if(page==="impostazioni") targets=cards().filter(c=>/impostaz|pin|budget/.test(text(c)));
-   targets=targets.filter(Boolean);
-   cards().forEach(c=>c.style.display=targets.length?(targets.includes(c)?"":"none"):"");
-   if(targets.length) setTimeout(()=>targets[0].scrollIntoView({behavior:"smooth",block:"start"}),40);
-   else window.scrollTo({top:0,behavior:"smooth"});
-   items.forEach(i=>i.classList.toggle("active",i.dataset.page===page));
-   shut();
- }
- items.forEach(i=>i.addEventListener("click",e=>{e.preventDefault();go(i.dataset.page)}));
- window.appMenuGo=go;
+  function openDrawer(){drawer.classList.add('open');overlay.classList.add('open')}
+  function closeDrawer(){drawer.classList.remove('open');overlay.classList.remove('open')}
+  hamburger.addEventListener('click',openDrawer);
+  overlay.addEventListener('click',closeDrawer);
+
+  function allCards(){return [...document.querySelectorAll('main .card')];}
+  function txt(c){return (c.innerText||'').toLowerCase();}
+  function findCard(words){
+    return allCards().find(c=>words.some(w=>txt(c).includes(w)));
+  }
+
+  function show(screen){
+    const cards=allCards();
+    let targets=[];
+    if(screen==='home'){
+      targets=cards.slice(0,3);
+    }else if(screen==='obiettivi'){
+      targets=cards.filter(c=>/napoli|fantacalcio|motorino/.test(txt(c)));
+    }else if(screen==='soldi'){
+      targets=[findCard(['gestisci i miei soldi','aggiungi soldi','preleva'])];
+    }else if(screen==='tabella'){
+      targets=[findCard(['tabella dei risparmi'])];
+    }else if(screen==='movimenti'){
+      targets=[findCard(['movimenti','cronologia','storico'])];
+    }else if(screen==='grafici'){
+      targets=cards.filter(c=>/grafico|andamento|mensile|statistic/.test(txt(c)));
+    }else if(screen==='posizione'){
+      targets=[findCard(['dove sono i soldi','posizione dei soldi'])];
+    }else if(screen==='impostazioni'){
+      targets=cards.filter(c=>/impostaz|pin|budget/.test(txt(c)));
+    }
+    targets=targets.filter(Boolean);
+
+    // Keep the original app DOM intact; only toggle visibility.
+    cards.forEach(c=>c.style.display=targets.includes(c)?'':'none');
+
+    items.forEach(i=>i.classList.toggle('active',i.dataset.screen===screen));
+    closeDrawer();
+
+    if(targets.length){
+      requestAnimationFrame(()=>targets[0].scrollIntoView({behavior:'smooth',block:'start'}));
+    }else{
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+  }
+
+  items.forEach(item=>{
+    item.addEventListener('click',function(){
+      show(this.dataset.screen);
+    });
+  });
+
+  // Start with Home.
+  window.addEventListener('load',()=>show('home'));
 })();
 </script>
+
 </body>
 </html>
