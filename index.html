@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="I miei risparmi">
+<link rel="manifest" href="manifest.webmanifest">
+<title>I miei risparmi</title>
+<style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display",Arial,sans-serif;color:#101828;background:#f4f6f8}
+*{box-sizing:border-box}body{margin:0}.wrap{max-width:760px;margin:auto;padding:18px 16px 40px}
+h1{margin:8px 0 4px;font-size:30px}.sub{color:#667085;margin-bottom:18px}
+.card{background:white;border-radius:20px;padding:18px;margin:12px 0;box-shadow:0 4px 18px #0000000d}
+.total{font-size:34px;font-weight:800}.muted{color:#667085}.grid{display:grid;grid-template-columns:1fr;gap:12px}
+.fund{border:1px solid #e4e7ec;border-radius:16px;padding:15px}.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.bar{height:9px;background:#e9edf2;border-radius:99px;overflow:hidden;margin:10px 0}.fill{height:100%;background:#111827;border-radius:99px}
+button{border:0;border-radius:12px;padding:12px 15px;font-size:15px;font-weight:700;background:#111827;color:white}
+button.secondary{background:#eef1f5;color:#111827}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+input,select{width:100%;padding:12px;border:1px solid #d0d5dd;border-radius:12px;font-size:16px;margin-top:6px;background:white}
+label{display:block;margin:12px 0 0;font-weight:650;font-size:14px}.history{font-size:14px}.item{padding:12px 0;border-bottom:1px solid #eee}.item:last-child{border-bottom:0}
+.plus{color:#067647;font-weight:800}.minus{color:#b42318;font-weight:800}.note{font-size:13px;color:#667085}
+.small{font-size:13px}.pill{background:#eef1f5;padding:5px 9px;border-radius:99px;font-size:12px}
+@media(min-width:600px){.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>💰 I miei risparmi</h1>
+  <div class="sub">Controlla Napoli, Fantacalcio e Motorino.</div>
+
+  <div class="card">
+    <div class="muted">Totale risparmiato</div>
+    <div id="grandTotal" class="total">€75,00</div>
+    <div class="note">Il saldo iniziale comprende i €75 già messi da parte per Napoli.</div>
+  </div>
+
+  <div class="card">
+    <div class="row"><h2 style="margin:0">Obiettivi</h2><span class="pill">saldi reali</span></div>
+    <div id="funds" class="grid"></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">➕ Aggiungi soldi</h2>
+    <label>Obiettivo
+      <select id="fundSelect"></select>
+    </label>
+    <label>Importo (€)
+      <input id="amount" type="number" inputmode="decimal" min="0" step="5" placeholder="es. 20">
+    </label>
+    <label>Dove li hai messi?
+      <select id="location">
+        <option>Salvadanaio</option>
+        <option>Portafoglio</option>
+      </select>
+    </label>
+    <label>Nota (facoltativa)
+      <input id="note" type="text" placeholder="es. quota ottobre">
+    </label>
+    <div class="actions"><button onclick="addMoney()">Aggiungi</button></div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">📦 Dove sono i soldi?</h2>
+    <div class="row"><span>Salvadanaio</span><strong id="piggy">€75,00</strong></div>
+    <div class="row" style="margin-top:10px"><span>Portafoglio</span><strong id="wallet">€0,00</strong></div>
+    <div class="note" style="margin-top:10px">Qui puoi vedere la somma fisica che hai nei due posti.</div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">🧾 Movimenti</h2>
+    <div id="history" class="history"></div>
+    <div class="actions"><button class="secondary" onclick="resetApp()">Azzera dati</button></div>
+  </div>
+</div>
+
+<script>
+const KEY="miei_risparmi_v2";
+const initial={
+ funds:[
+  {id:"napoli",name:"Napoli",target:600,saved:75},
+  {id:"fanta",name:"Fantacalcio",target:150,saved:0},
+  {id:"motorino",name:"Motorino",target:1500,saved:0}
+ ],
+ locations:{Salvadanaio:75,Portafoglio:0},
+ history:[{date:new Date().toLocaleDateString("it-IT"),fund:"Napoli",amount:75,location:"Salvadanaio",note:"Saldo iniziale: 3 quote già messe da parte"}]
+};
+let data=JSON.parse(localStorage.getItem(KEY)||"null")||initial;
+function euro(n){return new Intl.NumberFormat("it-IT",{style:"currency",currency:"EUR"}).format(n)}
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function render(){
+ const total=data.funds.reduce((s,f)=>s+f.saved,0);
+ document.getElementById("grandTotal").textContent=euro(total);
+ document.getElementById("piggy").textContent=euro(data.locations.Salvadanaio);
+ document.getElementById("wallet").textContent=euro(data.locations.Portafoglio);
+ document.getElementById("funds").innerHTML=data.funds.map(f=>{
+  const p=Math.min(100,(f.saved/f.target)*100);
+  return `<div class="fund"><div class="row"><strong>${f.name}</strong><strong>${euro(f.saved)}</strong></div>
+  <div class="bar"><div class="fill" style="width:${p}%"></div></div>
+  <div class="row"><span class="muted">${p.toFixed(0)}% dell'obiettivo</span><span class="muted">${euro(f.target)}</span></div></div>`
+ }).join("");
+ document.getElementById("fundSelect").innerHTML=data.funds.map(f=>`<option value="${f.id}">${f.name}</option>`).join("");
+ document.getElementById("history").innerHTML=data.history.slice().reverse().map(h=>
+  `<div class="item"><div class="row"><strong>${h.fund}</strong><span class="plus">+${euro(h.amount)}</span></div>
+   <div class="note">${h.date} · ${h.location}${h.note?" · "+h.note:""}</div></div>`
+ ).join("")||"<div class='muted'>Nessun movimento.</div>";
+}
+function addMoney(){
+ const id=document.getElementById("fundSelect").value;
+ const amount=parseFloat(document.getElementById("amount").value);
+ const location=document.getElementById("location").value;
+ const note=document.getElementById("note").value.trim();
+ if(!amount||amount<=0){alert("Inserisci un importo valido.");return}
+ const f=data.funds.find(x=>x.id===id); f.saved+=amount; data.locations[location]+=amount;
+ data.history.push({date:new Date().toLocaleDateString("it-IT"),fund:f.name,amount,location,note});
+ document.getElementById("amount").value="";document.getElementById("note").value="";save();
+}
+function resetApp(){
+ if(confirm("Vuoi davvero cancellare tutti i dati dell'app?")){localStorage.removeItem(KEY);data=initial;render()}
+}
+render();
+</script>
+</body>
+</html>
