@@ -56,8 +56,51 @@ input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:
 .px-box span{font-size:10px;opacity:.7}
 @media(max-width:600px){.px-summary{grid-template-columns:repeat(2,1fr)}}
 </style>
+
+<style>
+#bottom-nav-app{position:fixed;left:0;right:0;bottom:0;z-index:9999;padding:8px max(8px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));background:rgba(18,18,18,.96);backdrop-filter:blur(14px);border-top:1px solid #333;display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+#bottom-nav-app a{color:#fff;text-decoration:none;text-align:center;font-size:11px;padding:7px 2px;border-radius:10px}
+#bottom-nav-app a:active{background:#333}
+#bottom-nav-app .ico{display:block;font-size:19px;line-height:20px}
+#bottom-nav-app .nav-more{position:relative}
+#more-panel-app{display:none;position:absolute;bottom:55px;right:4px;min-width:185px;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:14px;padding:7px;box-shadow:0 8px 30px rgba(0,0,0,.45)}
+#more-panel-app:target{display:block}
+#more-panel-app a{display:block;text-align:left;padding:11px;font-size:13px}
+#screen-chart,#screen-other{display:none;padding-bottom:100px}
+#screen-chart:target,#screen-other:target{display:block}
+#screen-chart:target ~ #main-app-content,#screen-other:target ~ #main-app-content{display:none}
+body{padding-bottom:82px!important}
+</style>
+
+<style>
+#chart-page{padding:18px}
+.chart-card{background:#151515;border:1px solid #2d2d2d;border-radius:18px;padding:16px;margin-top:12px}
+.chart-bars{display:flex;align-items:flex-end;gap:12px;height:230px;padding:15px 5px 0;border-bottom:1px solid #444}
+.chart-bar-wrap{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+.chart-bar{width:75%;min-height:2px;border-radius:8px 8px 0 0;background:#e8e8e8}
+.chart-label{font-size:10px;opacity:.75;margin-top:7px}
+.chart-value{font-size:10px;margin-bottom:4px}
+.chart-note{font-size:12px;opacity:.7;line-height:1.4}
+</style>
+
+<style>
+#screen-table{display:none;min-height:calc(100vh - 90px);padding:18px 14px 105px}
+#screen-table:target{display:block}
+#screen-table:target ~ #main-app-content{display:none}
+#screen-table:target ~ #more-panel-app{display:none}
+.table-page-inner{max-width:100%;margin:auto}
+#bottom-nav-app{position:fixed;left:0;right:0;bottom:0;z-index:9999;padding:8px max(8px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));background:rgba(18,18,18,.97);backdrop-filter:blur(14px);border-top:1px solid #333;display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+#bottom-nav-app a{color:#fff;text-decoration:none;text-align:center;font-size:11px;padding:7px 2px;border-radius:10px}
+#bottom-nav-app a:active{background:#333}
+#bottom-nav-app .ico{display:block;font-size:19px;line-height:20px}
+.nav-more{position:relative}
+#more-panel-app{display:none;position:absolute;bottom:55px;right:4px;min-width:180px;background:#1b1b1b;border:1px solid #3a3a3a;border-radius:14px;padding:7px;box-shadow:0 8px 30px rgba(0,0,0,.45)}
+#more-panel-app:target{display:block}
+#more-panel-app a{display:block;text-align:left;padding:11px;font-size:13px}
+body{padding-bottom:82px!important}
+</style>
 </head>
-<body>
+<body id="app-body"><main id="main-app-content">
 <div id="lockScreen" class="lock"><div class="lockbox">
   <div style="font-size:54px">🔐</div><h2>Inserisci il PIN</h2><div class="note">I tuoi dati restano salvati sul dispositivo.</div>
   <input id="pinInput" type="password" inputmode="numeric" maxlength="4" placeholder="••••">
@@ -388,22 +431,7 @@ function resetApp(){
 render();checkPin();
 </script>
 
-<section id="piano-excel">
-<h2>📋 Piano di risparmio</h2>
-<div class="hint">Questa è la tabella del piano come nel file Excel. Prima trasferisci i soldi dal 👛 Portafoglio al salvadanaio, poi inserisci l'importo e metti la <b>X</b> sul salvadanaio a cui hai destinato quei soldi.</div>
-<div class="px-scroll">
-<table class="px-table">
-<thead><tr><th>Mese</th><th>🏟️ Napoli</th><th>⚽ Fantacalcio</th><th>🛵 Motorino</th><th>Totale mese</th></tr></thead>
-<tbody><tr><td>Settembre</td><td><input class="px-input" type="number" min="0" step="1" data-month="0" data-fund="napoli" value="0" aria-label="Settembre 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="0" data-fund="napoli"> X</label><span class="px-euro" data-show="0-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="0" data-fund="fanta" value="0" aria-label="Settembre ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="0" data-fund="fanta"> X</label><span class="px-euro" data-show="0-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="0" data-fund="motorino" value="0" aria-label="Settembre 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="0" data-fund="motorino"> X</label><span class="px-euro" data-show="0-motorino">€0</span></td><td class="px-total" data-row="0">€0</td></tr><tr><td>Ottobre</td><td><input class="px-input" type="number" min="0" step="1" data-month="1" data-fund="napoli" value="0" aria-label="Ottobre 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="1" data-fund="napoli"> X</label><span class="px-euro" data-show="1-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="1" data-fund="fanta" value="0" aria-label="Ottobre ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="1" data-fund="fanta"> X</label><span class="px-euro" data-show="1-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="1" data-fund="motorino" value="0" aria-label="Ottobre 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="1" data-fund="motorino"> X</label><span class="px-euro" data-show="1-motorino">€0</span></td><td class="px-total" data-row="1">€0</td></tr><tr><td>Novembre</td><td><input class="px-input" type="number" min="0" step="1" data-month="2" data-fund="napoli" value="0" aria-label="Novembre 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="2" data-fund="napoli"> X</label><span class="px-euro" data-show="2-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="2" data-fund="fanta" value="0" aria-label="Novembre ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="2" data-fund="fanta"> X</label><span class="px-euro" data-show="2-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="2" data-fund="motorino" value="0" aria-label="Novembre 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="2" data-fund="motorino"> X</label><span class="px-euro" data-show="2-motorino">€0</span></td><td class="px-total" data-row="2">€0</td></tr><tr><td>Dicembre</td><td><input class="px-input" type="number" min="0" step="1" data-month="3" data-fund="napoli" value="0" aria-label="Dicembre 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="3" data-fund="napoli"> X</label><span class="px-euro" data-show="3-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="3" data-fund="fanta" value="0" aria-label="Dicembre ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="3" data-fund="fanta"> X</label><span class="px-euro" data-show="3-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="3" data-fund="motorino" value="0" aria-label="Dicembre 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="3" data-fund="motorino"> X</label><span class="px-euro" data-show="3-motorino">€0</span></td><td class="px-total" data-row="3">€0</td></tr><tr><td>Gennaio</td><td><input class="px-input" type="number" min="0" step="1" data-month="4" data-fund="napoli" value="0" aria-label="Gennaio 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="4" data-fund="napoli"> X</label><span class="px-euro" data-show="4-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="4" data-fund="fanta" value="0" aria-label="Gennaio ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="4" data-fund="fanta"> X</label><span class="px-euro" data-show="4-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="4" data-fund="motorino" value="0" aria-label="Gennaio 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="4" data-fund="motorino"> X</label><span class="px-euro" data-show="4-motorino">€0</span></td><td class="px-total" data-row="4">€0</td></tr><tr><td>Febbraio</td><td><input class="px-input" type="number" min="0" step="1" data-month="5" data-fund="napoli" value="0" aria-label="Febbraio 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="5" data-fund="napoli"> X</label><span class="px-euro" data-show="5-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="5" data-fund="fanta" value="0" aria-label="Febbraio ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="5" data-fund="fanta"> X</label><span class="px-euro" data-show="5-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="5" data-fund="motorino" value="0" aria-label="Febbraio 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="5" data-fund="motorino"> X</label><span class="px-euro" data-show="5-motorino">€0</span></td><td class="px-total" data-row="5">€0</td></tr><tr><td>Marzo</td><td><input class="px-input" type="number" min="0" step="1" data-month="6" data-fund="napoli" value="0" aria-label="Marzo 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="6" data-fund="napoli"> X</label><span class="px-euro" data-show="6-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="6" data-fund="fanta" value="0" aria-label="Marzo ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="6" data-fund="fanta"> X</label><span class="px-euro" data-show="6-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="6" data-fund="motorino" value="0" aria-label="Marzo 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="6" data-fund="motorino"> X</label><span class="px-euro" data-show="6-motorino">€0</span></td><td class="px-total" data-row="6">€0</td></tr><tr><td>Aprile</td><td><input class="px-input" type="number" min="0" step="1" data-month="7" data-fund="napoli" value="0" aria-label="Aprile 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="7" data-fund="napoli"> X</label><span class="px-euro" data-show="7-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="7" data-fund="fanta" value="0" aria-label="Aprile ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="7" data-fund="fanta"> X</label><span class="px-euro" data-show="7-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="7" data-fund="motorino" value="0" aria-label="Aprile 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="7" data-fund="motorino"> X</label><span class="px-euro" data-show="7-motorino">€0</span></td><td class="px-total" data-row="7">€0</td></tr><tr><td>Maggio</td><td><input class="px-input" type="number" min="0" step="1" data-month="8" data-fund="napoli" value="0" aria-label="Maggio 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="8" data-fund="napoli"> X</label><span class="px-euro" data-show="8-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="8" data-fund="fanta" value="0" aria-label="Maggio ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="8" data-fund="fanta"> X</label><span class="px-euro" data-show="8-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="8" data-fund="motorino" value="0" aria-label="Maggio 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="8" data-fund="motorino"> X</label><span class="px-euro" data-show="8-motorino">€0</span></td><td class="px-total" data-row="8">€0</td></tr><tr><td>Giugno</td><td><input class="px-input" type="number" min="0" step="1" data-month="9" data-fund="napoli" value="0" aria-label="Giugno 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="9" data-fund="napoli"> X</label><span class="px-euro" data-show="9-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="9" data-fund="fanta" value="0" aria-label="Giugno ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="9" data-fund="fanta"> X</label><span class="px-euro" data-show="9-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="9" data-fund="motorino" value="0" aria-label="Giugno 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="9" data-fund="motorino"> X</label><span class="px-euro" data-show="9-motorino">€0</span></td><td class="px-total" data-row="9">€0</td></tr><tr><td>Luglio</td><td><input class="px-input" type="number" min="0" step="1" data-month="10" data-fund="napoli" value="0" aria-label="Luglio 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="10" data-fund="napoli"> X</label><span class="px-euro" data-show="10-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="10" data-fund="fanta" value="0" aria-label="Luglio ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="10" data-fund="fanta"> X</label><span class="px-euro" data-show="10-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="10" data-fund="motorino" value="0" aria-label="Luglio 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="10" data-fund="motorino"> X</label><span class="px-euro" data-show="10-motorino">€0</span></td><td class="px-total" data-row="10">€0</td></tr></tbody>
-</table>
-</div>
-<div class="px-summary">
-<div class="px-box"><b id="px-marked">€0</b><span>Totale con X</span></div>
-<div class="px-box"><b id="px-napoli">€0</b><span>Napoli</span></div>
-<div class="px-box"><b id="px-fanta">€0</b><span>Fantacalcio</span></div>
-<div class="px-box"><b id="px-motorino">€0</b><span>Motorino</span></div>
-</div>
-</section>
+
 
 <script>
 (function(){
@@ -455,5 +483,81 @@ render();checkPin();
  render();
 })();
 </script>
+</main>
+
+
+<section id="screen-other">
+<div style="padding:18px">
+<h2>⋯ Altro</h2>
+<div class="chart-card">
+<a href="#piano-excel" style="display:block;padding:12px;color:inherit">📋 Piano di risparmio</a>
+
+<a href="#app-body" style="display:block;padding:12px;color:inherit">🏠 Torna all'app</a>
+</div>
+</div>
+</section>
+
+
+
+<section id="screen-table">
+  <div class="table-page-inner">
+    <section id="piano-excel">
+<h2>📋 Piano di risparmio</h2>
+<div class="hint">Questa è la tabella del piano come nel file Excel. Prima trasferisci i soldi dal 👛 Portafoglio al salvadanaio, poi inserisci l'importo e metti la <b>X</b> sul salvadanaio a cui hai destinato quei soldi.</div>
+<div class="px-scroll">
+<table class="px-table">
+<thead><tr><th>Mese</th><th>🏟️ Napoli</th><th>⚽ Fantacalcio</th><th>🛵 Motorino</th><th>Totale mese</th></tr></thead>
+<tbody><tr><td>Settembre</td><td><input class="px-input" type="number" min="0" step="1" data-month="0" data-fund="napoli" value="0" aria-label="Settembre 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="0" data-fund="napoli"> X</label><span class="px-euro" data-show="0-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="0" data-fund="fanta" value="0" aria-label="Settembre ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="0" data-fund="fanta"> X</label><span class="px-euro" data-show="0-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="0" data-fund="motorino" value="0" aria-label="Settembre 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="0" data-fund="motorino"> X</label><span class="px-euro" data-show="0-motorino">€0</span></td><td class="px-total" data-row="0">€0</td></tr><tr><td>Ottobre</td><td><input class="px-input" type="number" min="0" step="1" data-month="1" data-fund="napoli" value="0" aria-label="Ottobre 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="1" data-fund="napoli"> X</label><span class="px-euro" data-show="1-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="1" data-fund="fanta" value="0" aria-label="Ottobre ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="1" data-fund="fanta"> X</label><span class="px-euro" data-show="1-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="1" data-fund="motorino" value="0" aria-label="Ottobre 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="1" data-fund="motorino"> X</label><span class="px-euro" data-show="1-motorino">€0</span></td><td class="px-total" data-row="1">€0</td></tr><tr><td>Novembre</td><td><input class="px-input" type="number" min="0" step="1" data-month="2" data-fund="napoli" value="0" aria-label="Novembre 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="2" data-fund="napoli"> X</label><span class="px-euro" data-show="2-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="2" data-fund="fanta" value="0" aria-label="Novembre ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="2" data-fund="fanta"> X</label><span class="px-euro" data-show="2-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="2" data-fund="motorino" value="0" aria-label="Novembre 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="2" data-fund="motorino"> X</label><span class="px-euro" data-show="2-motorino">€0</span></td><td class="px-total" data-row="2">€0</td></tr><tr><td>Dicembre</td><td><input class="px-input" type="number" min="0" step="1" data-month="3" data-fund="napoli" value="0" aria-label="Dicembre 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="3" data-fund="napoli"> X</label><span class="px-euro" data-show="3-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="3" data-fund="fanta" value="0" aria-label="Dicembre ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="3" data-fund="fanta"> X</label><span class="px-euro" data-show="3-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="3" data-fund="motorino" value="0" aria-label="Dicembre 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="3" data-fund="motorino"> X</label><span class="px-euro" data-show="3-motorino">€0</span></td><td class="px-total" data-row="3">€0</td></tr><tr><td>Gennaio</td><td><input class="px-input" type="number" min="0" step="1" data-month="4" data-fund="napoli" value="0" aria-label="Gennaio 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="4" data-fund="napoli"> X</label><span class="px-euro" data-show="4-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="4" data-fund="fanta" value="0" aria-label="Gennaio ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="4" data-fund="fanta"> X</label><span class="px-euro" data-show="4-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="4" data-fund="motorino" value="0" aria-label="Gennaio 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="4" data-fund="motorino"> X</label><span class="px-euro" data-show="4-motorino">€0</span></td><td class="px-total" data-row="4">€0</td></tr><tr><td>Febbraio</td><td><input class="px-input" type="number" min="0" step="1" data-month="5" data-fund="napoli" value="0" aria-label="Febbraio 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="5" data-fund="napoli"> X</label><span class="px-euro" data-show="5-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="5" data-fund="fanta" value="0" aria-label="Febbraio ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="5" data-fund="fanta"> X</label><span class="px-euro" data-show="5-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="5" data-fund="motorino" value="0" aria-label="Febbraio 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="5" data-fund="motorino"> X</label><span class="px-euro" data-show="5-motorino">€0</span></td><td class="px-total" data-row="5">€0</td></tr><tr><td>Marzo</td><td><input class="px-input" type="number" min="0" step="1" data-month="6" data-fund="napoli" value="0" aria-label="Marzo 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="6" data-fund="napoli"> X</label><span class="px-euro" data-show="6-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="6" data-fund="fanta" value="0" aria-label="Marzo ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="6" data-fund="fanta"> X</label><span class="px-euro" data-show="6-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="6" data-fund="motorino" value="0" aria-label="Marzo 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="6" data-fund="motorino"> X</label><span class="px-euro" data-show="6-motorino">€0</span></td><td class="px-total" data-row="6">€0</td></tr><tr><td>Aprile</td><td><input class="px-input" type="number" min="0" step="1" data-month="7" data-fund="napoli" value="0" aria-label="Aprile 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="7" data-fund="napoli"> X</label><span class="px-euro" data-show="7-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="7" data-fund="fanta" value="0" aria-label="Aprile ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="7" data-fund="fanta"> X</label><span class="px-euro" data-show="7-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="7" data-fund="motorino" value="0" aria-label="Aprile 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="7" data-fund="motorino"> X</label><span class="px-euro" data-show="7-motorino">€0</span></td><td class="px-total" data-row="7">€0</td></tr><tr><td>Maggio</td><td><input class="px-input" type="number" min="0" step="1" data-month="8" data-fund="napoli" value="0" aria-label="Maggio 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="8" data-fund="napoli"> X</label><span class="px-euro" data-show="8-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="8" data-fund="fanta" value="0" aria-label="Maggio ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="8" data-fund="fanta"> X</label><span class="px-euro" data-show="8-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="8" data-fund="motorino" value="0" aria-label="Maggio 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="8" data-fund="motorino"> X</label><span class="px-euro" data-show="8-motorino">€0</span></td><td class="px-total" data-row="8">€0</td></tr><tr><td>Giugno</td><td><input class="px-input" type="number" min="0" step="1" data-month="9" data-fund="napoli" value="0" aria-label="Giugno 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="9" data-fund="napoli"> X</label><span class="px-euro" data-show="9-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="9" data-fund="fanta" value="0" aria-label="Giugno ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="9" data-fund="fanta"> X</label><span class="px-euro" data-show="9-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="9" data-fund="motorino" value="0" aria-label="Giugno 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="9" data-fund="motorino"> X</label><span class="px-euro" data-show="9-motorino">€0</span></td><td class="px-total" data-row="9">€0</td></tr><tr><td>Luglio</td><td><input class="px-input" type="number" min="0" step="1" data-month="10" data-fund="napoli" value="0" aria-label="Luglio 🏟️ Napoli"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="10" data-fund="napoli"> X</label><span class="px-euro" data-show="10-napoli">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="10" data-fund="fanta" value="0" aria-label="Luglio ⚽ Fantacalcio"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="10" data-fund="fanta"> X</label><span class="px-euro" data-show="10-fanta">€0</span></td><td><input class="px-input" type="number" min="0" step="1" data-month="10" data-fund="motorino" value="0" aria-label="Luglio 🛵 Motorino"><label style="display:block;margin-top:5px;font-size:11px"><input class="px-x" type="checkbox" data-month="10" data-fund="motorino"> X</label><span class="px-euro" data-show="10-motorino">€0</span></td><td class="px-total" data-row="10">€0</td></tr></tbody>
+</table>
+</div>
+<div class="px-summary">
+<div class="px-box"><b id="px-marked">€0</b><span>Totale con X</span></div>
+<div class="px-box"><b id="px-napoli">€0</b><span>Napoli</span></div>
+<div class="px-box"><b id="px-fanta">€0</b><span>Fantacalcio</span></div>
+<div class="px-box"><b id="px-motorino">€0</b><span>Motorino</span></div>
+</div>
+</section>
+  </div>
+</section>
+
+<nav id="bottom-nav-app">
+<a href="#app-body"><span class="ico">⌂</span>Home</a>
+<a href="#piano-excel"><span class="ico">🎯</span>Obiettivi</a>
+<a href="#piano-excel"><span class="ico">💰</span>Soldi</a>
+<a href="#screen-table"><span class="ico">📋</span>Tabella</a>
+<div class="nav-more">
+<a href="#more-panel-app"><span class="ico">⋯</span>Altro</a>
+<div id="more-panel-app">
+<a href="#screen-table">📋 Tabella</a>
+<a href="#app-body">🏠 Home</a>
+</div>
+</div>
+</nav>
 </body>
 </html>
+<script>
+(function(){
+  const KEY='piano_excel_v3';
+  const months=["Set","Ott","Nov","Dic","Gen","Feb","Mar","Apr","Mag","Giu","Lug"];
+  function renderChart(){
+    const el=document.getElementById('excel-chart-bars');
+    if(!el)return;
+    let s={};
+    try{s=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){s={};}
+    const totals=months.map((_,i)=>{
+      let n=0;
+      ['napoli','fanta','motorino'].forEach(f=>{
+        const d=s[i+'-'+f];
+        if(d)n+=Number(d.amount)||0;
+      });
+      return n;
+    });
+    const max=Math.max(1,...totals);
+    el.innerHTML=totals.map((v,i)=>
+      '<div class="chart-bar-wrap"><div class="chart-value">€'+Math.round(v)+'</div><div class="chart-bar" style="height:'+Math.max(2,(v/max)*185)+'px"></div><div class="chart-label">'+months[i]+'</div></div>'
+    ).join('');
+  }
+  window.addEventListener('hashchange',renderChart);
+  renderChart();
+})();
+</script>
